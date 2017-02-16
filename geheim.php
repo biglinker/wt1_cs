@@ -1,11 +1,25 @@
 <?php
 session_start();
-if(!isset($_SESSION['B_id'])) {
- die('Bitte zuerst <a href="login.php">einloggen</a>');
+
+include("session_mgmt.php");
+
+
+IF( isset($_SESSION['B_id']) )
+{
+	echo "<p>Sie dürfen diese Seite betreten</p>";
+	
+	echo "<p>eingeloggt als User: " . $_SESSION['B_id'] . "</p>";
+	
+	
 }
- 
-//Abfrage der Nutzer ID vom Login
-$userid = $_SESSION['B_id'];
- 
-echo "Hallo User: ".$userid;
+else
+{
+	echo "<p>Bitte zuerst einloggen</p>";
+	
+	echo "<p><a href='login.php'>Login-Seite</<a></p>";
+	
+	
+	
+}
+
 ?>

@@ -51,7 +51,7 @@ if(isset($errorMessage)) {
 if(isset($_GET['register'])) {
  $error = false;
  
- $email = $_POST['B_email'];
+ $email = strtolower($_POST['B_email']);
  $passwort = $_POST['B_passwort'];
  $firma = $_POST['B_firma'];
  $name = $_POST['B_name'];

@@ -25,6 +25,7 @@
                 <li><a href="new.php">Inserat erfassen</a></li>
                 <li><a href="register.php">Registrieren</a></li>
                 <li><a href="login.php">Login</a></li>
+                <li><a href="logout.php">Logout</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Nav header</li>
                 <li><a href="#">Separated link</a></li>
