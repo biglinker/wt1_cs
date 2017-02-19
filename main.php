@@ -1,5 +1,6 @@
 ﻿<?php 
-
+include("session_mgmt.php");
+include("db_connection.php");
 
 
 

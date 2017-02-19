@@ -56,6 +56,15 @@ if(isset($_POST['B_email'])) {
 			$_SESSION['B_id'] = $user_id;
 			$_SESSION['time'] = time();
 			
+			IF( isset($_GET['fwd']) ) {
+				$location_fwd = $_GET['fwd'];
+				echo "<meta http-equiv='refresh' content='0; url=$location_fwd'>";
+				//header("Location: $location_fwd");
+				exit();
+				
+			}
+			
+			
 		}
 		else
 		{
@@ -156,12 +165,12 @@ if(isset($errorMessage)) {
 			<h1>Login</h1>
 		
 		
-		<!-- PHP Code für Login -->
+		<!-- HTML Code für Login -->
 				
 		
 			<img src="src/png/logo.png" alt="Agricola-Trade" class="logo"></img>
 	
-				<form action="login.php" method="post" class="form-signin">
+				<form action="login.php<?php echo "?fwd=".$_GET['fwd'];  ?>" method="post" class="form-signin">
 				<h2 class="form-signin-heading"> Login </h2><br>
 				E-Mail:<br>
 				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" ><br><br>
@@ -173,6 +182,8 @@ if(isset($errorMessage)) {
 				
 				<a href="pwreset.php" role="button" class="btn btn-lg btn-block btn-info">Passwort vergessen</a>
 			</form> 
+			
+		<!-- HTML Code für Login  -->
 			 
 		
         </div>

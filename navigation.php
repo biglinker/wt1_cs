@@ -16,7 +16,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
+            <li><a href="main.php">Home</a></li>
             <li><a href="about.php">Über uns</a></li>
             <li><a href="contact.php">Kontakt</a></li>
             <li class="dropdown">
