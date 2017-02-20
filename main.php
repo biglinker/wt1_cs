@@ -66,14 +66,14 @@ if(isset($errorMessage)) {
     <div class="row">
         <div class="col-md-4">
           <h2>Registrieren/Mitmachen</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p>Anmeldebereich für Neue Mitglieder </p>
+          <p><a class="btn btn-default" href="register.php" role="button">Registrieren &raquo;</a></p>
         </div>
 		
         <div class="col-md-4">
           <h2>Login</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p>Hier gehts zum Login. Logge dich zuerst ein bevor du ein neues Insereat erfasst </p>
+          <p><a class="btn btn-default" href="login.php" role="button">Login &raquo;</a></p>
         </div>		
 	</div>
 	

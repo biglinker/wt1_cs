@@ -31,8 +31,6 @@
                 <li><a href="#">Separated link</a></li>
                 <li><a href="#">One more separated link</a></li>
               </ul>
-			  
-			  
             </li>
           <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Temp Formulare <span class="caret"></span></a>
@@ -41,5 +39,17 @@
                 <li><a href="new_angebot.php">Angebot abgeben</a></li>
                 
 		  </ul>
+		  
+		  	  <li>
+			  
+			  <!-- Suche in DB -->
+			  <form class="navbar-form navbar-left" action="suche.php" method="post" id="searchform" role="search">
+					<div class="form-group">
+						<input type="text" name="name" class="form-control" placeholder="Suchen...">
+					</div>
+						<button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
+				</form>
+			  </li>
+		  
         </div><!--/.nav-collapse -->
     </nav>
