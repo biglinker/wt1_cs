@@ -1,14 +1,6 @@
 ﻿<?php 
-session_start();
-
-//Only for development
-ini_set("display_errors", 1);
-error_reporting(E_ALL & ~E_NOTICE);
-
 include("session_mgmt.php");
-include("db_connection.php");
-
-
+//include("db_connection.php");
 
 
 
@@ -41,29 +33,17 @@ if(isset($errorMessage)) {
 	</div>
  
  <!-- Page Content -->
+ 
     <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-12">
-			<h1>Passwort zurücksetzen</h1>
-		
-				<form action="pwreset_submit.php" method="post" class="form-signin">
-				<h2 class="form-signin-heading"> Passwort anfordern </h2><br>
-				E-Mail:<br>
-				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" ><br><br>
-			 			 
-				<input type="submit" value="Zurücksetzen" class="btn btn-lg btn-success btn-block">
-				
-				
-			</form>
-			
-        </div>
-      </div>
-   </div>
+	
+	
 
-	<footer>
+
+
       <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
+       <h2>Vielen Dank! <br><br>
+	   es wird ihnen in den nächsten Sekunden ein E-Mail mit der Anleitung <br>für die Passwort zurücksetzung geschickt.<br><br>
+	   <Br> Überprüfen sie ihren Posteingang, um den Anweisungen zu folgen</h2><br><br><br>
 		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
       </div>
 
@@ -78,3 +58,6 @@ if(isset($errorMessage)) {
     <script src="res/bootstrap/js/docs.min.js"></script>
 </body>
 </html>
+
+
+

@@ -183,6 +183,8 @@ if(isset($errorMessage)) {
 				<a href="pwreset.php" role="button" class="btn btn-lg btn-block btn-info">Passwort vergessen</a>
 			</form> 
 			
+			<center><h2><a href="register.php" ><span class="glyphicon glyphicon-user"></span> Noch kein Login?</a> </h2></center>
+			
 		<!-- HTML Code für Login  -->
 			 
 		

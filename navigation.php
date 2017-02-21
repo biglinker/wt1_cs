@@ -22,28 +22,27 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
               <ul class="dropdown-menu">
+				<li><a href="login.php">Login</a></li>
+				<li><a href="logout.php">Logout</a></li>
+				<li><a href="register.php">Registrieren</a></li>
+				<li role="separator" class="divider"></li>
+				<li class="dropdown-header">Inserieren</li>
+				<li role="separator" class="divider"></li>
                 <li><a href="new.php">Inserat erfassen</a></li>
-                <li><a href="register.php">Registrieren</a></li>
-                <li><a href="login.php">Login</a></li>
-                <li><a href="logout.php">Logout</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
+				
+                
+                
+                
+                
+              
               </ul>
             </li>
-          <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Temp Formulare <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="pwreset.php">Passwort vergessen</a></li>
-                <li><a href="new_angebot.php">Angebot abgeben</a></li>
-                
-		  </ul>
+        
 		  
 		  	  <li>
 			  
 			  <!-- Suche in DB -->
-			  <form class="navbar-form navbar-left" action="suche.php" method="post" id="searchform" role="search">
+			  <form class="navbar-form navbar-left" action="suche.php" method="post" id="searchform" role="search" >
 					<div class="form-group">
 						<input type="text" name="name" class="form-control" placeholder="Suchen...">
 					</div>
