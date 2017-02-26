@@ -1,10 +1,10 @@
 ﻿ <!DOCTYPE html> 
 <html lang="de"> 
 <?php
-include("session_mgmt.php");
-include("db_connection.php");
+include "session_mgmt.php";
+include "db_connection.php";
 
-//include("login_req.php");
+include "login_req.php";
 
 //Code während Entwicklung
 	ini_set("display_errors", 1);
@@ -109,7 +109,7 @@ if(isset($errorMessage)) {
 	<div class="container">
  <?php  
   //query  the database table
-	$sql = "SELECT *, count(A_id) as A_count FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.B_id = '$userid' ";
+	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE Nachfrage.B_id = '$userid'";
   
   echo $sql;
   //run  the query against the mysql query function
@@ -120,10 +120,11 @@ if(isset($errorMessage)) {
  if (mysqli_num_rows($result) > 0) {
 	// output data of each row
     while($row = mysqli_fetch_array($result)) {
-
+	var_dump($row);
 	$titel = $row['N_titel'];
 	$text =  substr($row['N_beschreibung'], 0,200);
 	$id = $row['N_id'];
+	
 	
  ?>
  
