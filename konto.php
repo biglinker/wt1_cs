@@ -7,7 +7,6 @@ include("db_connection.php");
 //include("login_req.php");
 
 //Code während Entwicklung
-	var_dump($_POST);
 	ini_set("display_errors", 1);
 	error_reporting(E_ALL & ~E_NOTICE);
 	//-----------------
@@ -15,9 +14,9 @@ include("db_connection.php");
 
 	$nr = $_GET['nr'];
 
+	$userid = $_SESSION['B_id'];
 
-
-	$sql = "SELECT * FROM Nachfrage LIMIT 1";
+	/*$sql = "SELECT * FROM Nachfrage WHERE B_id = '$userid' LIMIT 1";
 	//echo $sql;
 	$result = mysqli_query($conn, $sql);
 
@@ -37,10 +36,10 @@ include("db_connection.php");
     }
 } else {
     echo "<p>0 results in DB Nachfrage</p>";
-}
+}*/
 
 
-mysqli_close($conn);
+//mysqli_close($conn);
 ?>
 <head>
   <title>Agricola-Trade</title> 
@@ -70,16 +69,113 @@ if(isset($errorMessage)) {
 		<div class="row">
 			<div class="col-md-12">
 				<h1>Konto Übersicht</h1>
+				
+				<h3>Hallo User <?php echo $userid; ?> </h3>
 				<p>Inserate anzeigen / löschen</p>
 				<p>Benutzerangaben ändern </p>
 				<p>Angebote zu inseraten als xml File per Mail</p>
 				<p>Später: Passwort ändern</p>
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col-md-4">
+				<h1>Inserat hinzufügen</h1>
+				<p>Erstellen Sie jetzt ein neues Nachfrage-Inserat, worauf Ihnen potenzielle Lieferanen individuelle Angebot präsentieren können.</p>
+				<p><a class="btn btn-default" href="new.php" role="button">Inserat erstellen &raquo;</a></p>
+			</div>
+			
+			<div class="col-md-4">
+				<h1>Benutzerangaben anpassen</h1>
+				<p>Ändern Sie hier Ihre persönlichen Angaben wie z.B. Ihre Firmen-Adresse, Email-Adresse, etc.</p>
+				<p><a class="btn btn-default" href="#" role="button">Meine Daten bearbeiten &raquo;</a></p>
+			</div>
+			
+			<div class="col-md-4">
+				<h1>iX-eM-eL Export</h1>
+				<p>Exportieren Sie die Angebote zu Ihren Inseraten bequem als XML-Datei. Damit können sie das perfekt in ihre bestehende ERM Software einbinden.</p>
+				<p><a class="btn btn-default" href="xml_export.php" role="button">XML-Export starten&raquo;</a></p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">	
+				<h1>Übersicht über Ihre aktuellen Inserate</h1>	
+			</div>
+		</div>
 	</div>	
+	
+	
+	<div class="container">
+ <?php  
+  //query  the database table
+	$sql = "SELECT *, count(A_id) as A_count FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.B_id = '$userid' ";
+  
+  echo $sql;
+  //run  the query against the mysql query function
+  $result = mysqli_query($conn, $sql);
+	
+  
+ 
+ if (mysqli_num_rows($result) > 0) {
+	// output data of each row
+    while($row = mysqli_fetch_array($result)) {
+
+	$titel = $row['N_titel'];
+	$text =  substr($row['N_beschreibung'], 0,200);
+	$id = $row['N_id'];
+	
+ ?>
+ 
+ 
+    
+      <div class="row">
+        <div class="col-md-12">
+          <h2><?php echo $titel; ?></h2>
+          <p> <?php echo $text; ?></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
+        </div>
+	  </div>
+	 
+	  
+<?php
+		}
+	} else {
+?>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Leider nichts gefunden</h2>
+          <p>Wir haben keine passenden Einträge in der Datenbank gefunden</p>
+        </div>
+	  </div>
+
+<?php  }	
+?>
+	
+	
+	
+	
+	
 	
 	<!-- Page Content -->
 	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h1>Übersicht über Ihre aktuellen Inserate</h1>
+				
+				
+			
+				<h2><?php echo $titel;  ?></h2>
+				<p><?php echo $text;  ?></p>
+				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
+				<p><strong>gewünschte Menge: </strong> <?php echo $menge  ?></p>
+				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
+				<p>Inserat-Nr <?php echo $nr;  ?></p>
+			</div>
+		</div>	
+	
+	
 		<div class="row">
 			<div class="col-md-8">
 				<h2><?php echo $titel;  ?></h2>
