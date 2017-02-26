@@ -3,10 +3,15 @@ include("session_mgmt.php");
 include("db_connection.php");
 
 
+//Code während Entwicklung
+	var_dump($_POST);
+	ini_set("display_errors", 1);
+	error_reporting(E_ALL & ~E_NOTICE);
+	//-----------------
+	
 
 
 ?>
-
 <!DOCTYPE html> 
 <html> 
 <head>
@@ -31,64 +36,95 @@ if(isset($errorMessage)) {
 	<div class="container">
 		<?php include("navigation.php"); ?>
 	</div>
- 
- <!-- Page Content -->
- 
-    <div class="container">
 	
-	
-<?php
-	var_dump($_POST);
-
-  if(isset($_POST['name'])){
-// if(isset($_GET['go'])){
- // if(preg_match("/^[  a-zA-Z]+/", $_POST['name'])){
-  $name=$_POST['name'];
+	<!-- Page Header -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Inserate Suche</h1>
+			</div>
+		</div>
+	</div>	
+ 
+ 
+ <!-- Search Content -->
+	<div class="container">
+		
+ 
+ 
+ <?php
+   if(isset($_POST['name'])){
+  $name = $_POST['name'];
+   
+  //query  the database table
+  $sql="SELECT N_titel, N_beschreibung, N_qualitaet, N_menge, N_id FROM Nachfrage  WHERE N_titel LIKE '%" . $name ."%'";
   
-  echo "123";
-  //connect  to the database 
-	//$db=mysql_connect  ("localhost", "root",  "") or die ('I cannot connect to the database  because: ' . mysql_error());  
-	//-select  the database to use 
-	//$mydb=mysql_select_db("agricola"); 
-  
- // include("db_connection.php");
-  
-  //-query  the database table
-  $sql="SELECT N_titel, N_bescheibung, N_qualitaet, N_menge, N_id FROM Nachfrage  WHERE N_titel LIKE '%" . $name ."%'";
-  
-  echo $sql;
-  //-run  the query against the mysql query function
+  //echo $sql;
+  //run  the query against the mysql query function
   $result=mysqli_query($conn, $sql);
-  var_dump($result);
-  //-create  while loop and loop through result set
-	  while($row=mysqli_fetch_assoc($result)){
-				  $titel  			=$row['N_titel'];
-				  $beschreibung		=$row['N_bescheibung'];
-				  $qualitaet		=$row['N_qualitaet'];
-				  $menge			=$row['N_menge'];
-				  $id				=$row['N_id'];
-		  //-display the result of the array
-		  echo "<ul>\n";
-		  echo "<li>" . "<a  href=\"search.php?N_id=$id\">"   .$titel . " " . $beschreibung .  " " . $qualitaet .  " " . $menge .  "</a></li>\n";
-		  echo "</ul>";
-	  }
-  //}
-  //else{
-		echo  "<p>Please enter a search query</p>";
-  //}
-  //}
-  }
+	
+  
+ 
+ if (mysqli_num_rows($result) > 0) {
+	// output data of each row
+    while($row = mysqli_fetch_array($result)) {
+
+	$titel = $row['N_titel'];
+	$text =  substr($row['N_beschreibung'], 0,200);
+	$id = $row['N_id'];
+	
+ ?>
+ 
+ 
+    
+      <div class="row">
+        <div class="col-md-12">
+          <h2><?php echo $titel; ?></h2>
+          <p> <?php echo $text; ?></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
+        </div>
+	  </div>
+	 
+	  
+<?php
+		}
+	} else {
 ?>
 
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Leider nichts gefunden</h2>
+          <p>Wir haben keine passenden Einträge in der Datenbank gefunden</p>
+        </div>
+	  </div>
 
+<?php  }	
+
+
+
+
+
+}
+else
+{
+//Keine Eingabe über das Suchfeld
+echo "<p>Benutzen Sie das Suchfeld um nach Inseraten zu suchen</p>";
+	
+	
+}
+
+?>
+	</div>
+
+
+	
+	<footer>
       <div class="container">
-       
 		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
       </div>
 
 	</footer>
 
-</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

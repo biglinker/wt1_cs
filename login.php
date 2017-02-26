@@ -1,18 +1,13 @@
-﻿<?php
-session_start();
+﻿ <!DOCTYPE html>
+<html lang="de">
+<?php 
+include 'session_mgmt.php';
+include "db_connection.php";
 
 //Only for development
 ini_set("display_errors", 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
-include("session_mgmt.php");
-include("db_connection.php");
-
-
-
-//var_dump($_POST[]);
-
-//echo $_GET['login']);
 
 if(isset($_POST['B_email'])) {
 	$error = false;
@@ -129,11 +124,7 @@ if(isset($_POST['B_email'])) {
 	}
 	
 }
-
 ?>
-
-<!DOCTYPE html> 
-<html> 
 <head>
   <title>Login Agricola-Trade</title> 
   
@@ -143,7 +134,6 @@ if(isset($_POST['B_email'])) {
   
   <link href="dev/login.css" rel="stylesheet">
 </head> 
-
 <body>
  
 <?php 
@@ -168,9 +158,9 @@ if(isset($errorMessage)) {
 		<!-- HTML Code für Login -->
 				
 		
-			<img src="src/png/logo.png" alt="Agricola-Trade" class="logo"></img>
+			<img src="src/png/logo.png" alt="Agricola-Trade" class="logo">
 	
-				<form action="login.php<?php echo "?fwd=".$_GET['fwd'];  ?>" method="post" class="form-signin">
+			<form action="login.php<?php echo "?fwd=".$_GET['fwd'];  ?>" method="post" class="form-signin">
 				<h2 class="form-signin-heading"> Login </h2><br>
 				E-Mail:<br>
 				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" ><br><br>
@@ -183,7 +173,9 @@ if(isset($errorMessage)) {
 				<a href="pwreset.php" role="button" class="btn btn-lg btn-block btn-info">Passwort vergessen</a>
 			</form> 
 			
-			<center><h2><a href="register.php" ><span class="glyphicon glyphicon-user"></span> Noch kein Login?</a> </h2></center>
+			<center><h2>
+			<a href="register.php"><span class="glyphicon glyphicon-user"></span></a>  
+			<a href="register.php">Noch kein Login?</a> </h2></center>
 			
 		<!-- HTML Code für Login  -->
 			 
@@ -199,8 +191,6 @@ if(isset($errorMessage)) {
       </div>
 
 	</footer>
-
-</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -1,6 +1,10 @@
-﻿<?php
+﻿ <!DOCTYPE html> 
+<html lang="de"> 
+<?php
 include("session_mgmt.php");
 include("db_connection.php");
+
+//include("login_req.php");
 
 //Code während Entwicklung
 	var_dump($_POST);
@@ -13,7 +17,7 @@ include("db_connection.php");
 
 
 
-	$sql = "SELECT * FROM Nachfrage WHERE N_id = $nr LIMIT 1";
+	$sql = "SELECT * FROM Nachfrage LIMIT 1";
 	//echo $sql;
 	$result = mysqli_query($conn, $sql);
 
@@ -24,12 +28,11 @@ include("db_connection.php");
 		var_dump($row);
 		
 		$titel = $row['N_titel'];
-		$text = $row['N_beschreibung'];
+		$text = $row['N_bescheibung'];
 		$quali = $row['N_qualitaet'];
-		$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
-		$datum_ablauf = date("j.n.Y",strtotime($row['N_gueltig_bis']));
-		$menge = number_format($row['N_menge']);
-		$menge_einheit = $row['N_menge_einheit'];
+		$datum_erstellt = date("j.n.Y", $row['N_erstellt']);
+		$datum_ablauf = date("j.n.Y",$row['N_gueltig_bis']);
+		$menge = $row['N_menge'];
 		
     }
 } else {
@@ -39,9 +42,6 @@ include("db_connection.php");
 
 mysqli_close($conn);
 ?>
-
-<!DOCTYPE html> 
-<html> 
 <head>
   <title>Agricola-Trade</title> 
   
@@ -69,7 +69,11 @@ if(isset($errorMessage)) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h1>Inserat Anzeigen</h1>
+				<h1>Konto Übersicht</h1>
+				<p>Inserate anzeigen / löschen</p>
+				<p>Benutzerangaben ändern </p>
+				<p>Angebote zu inseraten als xml File per Mail</p>
+				<p>Später: Passwort ändern</p>
 			</div>
 		</div>
 	</div>	
@@ -81,53 +85,13 @@ if(isset($errorMessage)) {
 				<h2><?php echo $titel;  ?></h2>
 				<p><?php echo $text;  ?></p>
 				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
-				<p><strong>gewünschte Menge: </strong> <?php echo $menge . " " . $menge_einheit ?></p>
+				<p><strong>gewünschte Menge: </strong> <?php echo $menge  ?></p>
 				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
 				<p>Inserat-Nr <?php echo $nr;  ?></p>
 			</div>
-			
-			<div class="col-md-4">
-				<h2>Angebot erfassen #für eingeloggte User</h2>
-				
-				<form class="form-horizontal" action="#" method="post">
-					<div class="form-group">	
-						<label class="control-label col-sm-3" for="A_nachricht">Nachricht</label>
-						<div class="col-sm-9">
-							<textarea class="form-control" rows="5" id="A_nachricht" name="A_nachricht"></textarea>
-						</div>
-					</div>
-
-					<div class="form-group">						
-						<label class="control-label col-sm-3" for="A_menge">Menge</label>
-						<div class="col-sm-9">
-							<input type="text" class="form-control" size="40" maxlength="250" name="N_menge" placeholder="Menge">
-						</div>
-					</div>		
-						
-					<div class="form-group">				
-						<label class="control-label col-sm-3" for="A_preis">Preis</label>
-						<div class="col-sm-9">
-							<input type="date" class="form-control" size="40" maxlength="250" id="A_preis" name="A_preis" placeholder="5750.99">
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="col-sm-offset-3 col-sm-9">
-							<div class="checkbox">
-								<label><input type="checkbox">AGB von Agricola-Trade akzeptieren</label>
-							</div>
-						</div>
-					</div>
-						
-					<div class="form-group">	
-						    <div class="col-sm-offset-3 col-sm-9">
-								<button type="submit" class="btn btn-default">Angebot platzieren</button>
-							</div>
-					</div>	
-				</form> 
-			</div>
-		</div>
-	</div>		
+		</div>		
+	</div>
+	
 	
 	
 	

@@ -1,54 +1,58 @@
-﻿
-<nav class="navbar navbar-inverse navbar-default">
-        <div class="navbar-header">
+﻿<nav class="navbar navbar-inverse navbar-default">
+	<div class="navbar-header">
+			
+		<a class="navbar-brand" href="main.php">
+		<img alt="Brand-Logo" src="src/png/logo_wo_text.png" width="24" height="24">
+		</a>	
 		
-      <a class="navbar-brand" href="#">
-        <img alt="Brand-Logo" src="src/png/logo.png" width="24px" height="24px">
-      </a>	
-		
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Agricola</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="main.php">Home</a></li>
-            <li><a href="about.php">Über uns</a></li>
-            <li><a href="contact.php">Kontakt</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-				<li><a href="login.php">Login</a></li>
-				<li><a href="logout.php">Logout</a></li>
-				<li><a href="register.php">Registrieren</a></li>
-				<li role="separator" class="divider"></li>
-				<li class="dropdown-header">Inserieren</li>
-				<li role="separator" class="divider"></li>
-                <li><a href="new.php">Inserat erfassen</a></li>
-				
-                
-                
-                
-                
-              
-              </ul>
-            </li>
-        
+		</button>
 		  
-		  	  <li>
-			  
+		<a class="navbar-brand" href="main.php">Agricola</a>
+	</div>
+	<div id="navbar" class="navbar-collapse collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="new.php">Inserat erfassen</a></li>
+			<!--<li><a href="main.php">Home</a></li>-->
+			
+			<!-- Drop Down Account -->
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="login.php">Login</a></li>
+					<li><a href="logout.php">Logout</a></li>
+					<li><a href="register.php">Registrieren</a></li>
+					<li><a href="konto.php">Konto verwalten</a></li>
+					<li role="separator" class="divider"></li>
+					<li class="dropdown-header">Inserieren</li>
+					<li role="separator" class="divider"></li>
+					<li><a href="new.php">Inserat erfassen</a></li>
+				</ul>
+            </li>
+			
+			<!-- Drop Down Über uns -->
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Über uns <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li><a href="about.php">Über uns</a></li>
+					<li><a href="contact.php">Kontakt</a></li>
+				</ul>
+            </li>
+			
+			<!-- Suchfeld -->
+			<li>
 			  <!-- Suche in DB -->
 			  <form class="navbar-form navbar-left" action="suche.php" method="post" id="searchform" role="search" >
 					<div class="form-group">
-						<input type="text" name="name" class="form-control" placeholder="Suchen...">
+						<input type="text" name="name" size="60" class="form-control" placeholder="Suchen...">
 					</div>
 						<button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
 				</form>
 			  </li>
-		  
-        </div><!--/.nav-collapse -->
-    </nav>
+		  </ul>
+	</div><!--/.nav-collapse -->
+</nav>

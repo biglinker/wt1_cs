@@ -1,16 +1,16 @@
-﻿<?php 
-include("session_mgmt.php");
+ <!DOCTYPE html>
+<html lang="de">
+<?php 
+require_once "session_mgmt.php";
 include("db_connection.php");
 
-
-
+//Only for development
+ini_set("display_errors", 1);
+error_reporting(E_ALL & ~E_NOTICE);
 
 ?>
-
-<!DOCTYPE html> 
-<html> 
 <head>
-  <title>Login Agricola-Trade</title> 
+  <title>Agricola-Trade</title> 
   
   <!-- Boostrap CSS -->
   <link href="res/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -151,8 +151,6 @@ if(isset($errorMessage)) {
       </div>
 
 </footer>
-
-</div>
 
 
     <!-- Bootstrap core JavaScript -->
