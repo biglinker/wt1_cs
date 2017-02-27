@@ -8,6 +8,39 @@ include("db_connection.php");
 ini_set("display_errors", 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
+
+
+
+	$nr = $_GET['nr'];
+
+
+
+	$sql = "SELECT * FROM Nachfrage WHERE N_id = 1 LIMIT 1";
+	//echo $sql;
+	$result = mysqli_query($conn, $sql);
+
+	if (mysqli_num_rows($result) > 0) {
+	echo "<p>Ausgabe der Datenbank Nachfrage</p>";
+    // output data of each row
+    while($row = mysqli_fetch_array($result)) {
+		var_dump($row);
+		
+		$titel = $row['N_titel'];
+		$text = $row['N_bescheibung'];
+		$quali = $row['N_qualitaet'];
+		$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
+		$datum_ablauf = date("j.n.Y",strtotime($row['N_gueltig_bis']));
+		$menge = number_format($row['N_menge']);
+		$menge_einheit = $row['N_menge_einheit'];
+		
+    }
+} else {
+    echo "<p>0 results in DB Nachfrage</p>";
+}
+
+
+mysqli_close($conn);
+?>
 ?>
 <head>
   <title>Agricola-Trade</title> 
@@ -38,6 +71,9 @@ if(isset($errorMessage)) {
 			<div class="col-md-12">
 				<h1>Willkommen bei Agricola-Trade!</h1>
 				<h2>Der B2B Plattform für den Schweizer Agrar-Bereich</h2>
+				
+				<!-- Horizontale Linie -->
+				<hr style="border:#000000 1px; background-color:#000000;height:1px;width:75%;" align="left">
 			</div>
 		</div>
 	</div>
@@ -47,45 +83,28 @@ if(isset($errorMessage)) {
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
-          <h2>Top Inserat 1</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <h2><?php echo $titel;  ?></h2>
+          
+				<p><?php echo $text;  ?></p>
+				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
+				<p><strong>gewünschte Menge: </strong> <?php echo $menge . " " . $menge_einheit ?></p>
+				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
+				<p>Inserat-Nr <?php echo $nr;  ?></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=1" role="button">View details &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Top Inserat 2</h2>
           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=2" role="button">View details &raquo;</a></p>
        </div>
         <div class="col-md-4">
           <h2>Top Inserat 3</h2>
           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=3" role="button">View details &raquo;</a></p>
         </div>
       </div>
 	  
-    <div class="row">
-        <div class="col-md-4">
-          <h2>Registrieren/Mitmachen</h2>
-          <p>Anmeldebereich für Neue Mitglieder </p>
-          <p><a class="btn btn-default" href="register.php" role="button">Registrieren &raquo;</a></p>
-        </div>
-		
-        <div class="col-md-4">
-          <h2>Login</h2>
-          <p>Hier gehts zum Login. Logge dich zuerst ein bevor du ein neues Insereat erfasst </p>
-          <p><a class="btn btn-default" href="login.php" role="button">Login &raquo;</a></p>
-        </div>		
-	</div>
-	
-	<div class="row">
-        <div class="col-md-12">
-          <h2>Suchen</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-			
-	</div>
-	
+ 	
 	<div class="row">
         <div class="col-md-6">
           <h2>1</h2>
@@ -97,29 +116,28 @@ if(isset($errorMessage)) {
           <h2>2</h2>
           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>	
-
-        <div class="col-md-6">
-          <h2>3</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>	
-		
-        <div class="col-md-6">
-          <h2>4</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>	
-		
-        <div class="col-md-6">
-          <h2>5</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>	
-		
+        </div>		
 	</div>
 	
+	<!-- Brauchts möglicherweise gar nicht.
 	
+	    <div class="row">
+        <div class="col-md-6">
+          <h2>Registrieren/Mitmachen</h2>
+          <p>Anmeldebereich für Neue Mitglieder </p>
+          <p><a class="btn btn-default" href="register.php" role="button">Registrieren &raquo;</a></p>
+        </div>
+		
+        <div class="col-md-6">
+          <h2>Login</h2>
+          <p>Hier gehts zum Login. Logge dich zuerst ein bevor du ein neues Insereat erfasst </p>
+          <p><a class="btn btn-default" href="login.php" role="button">Login &raquo;</a></p>
+        </div> 
+	-->		
+	
+	<br>
+	<br>
+	</div>
 	
    </div>
  
