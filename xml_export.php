@@ -116,7 +116,7 @@ $dom->save($filename); // save as file
 $dom->save('xml/'.$filename); 
 
 //shortlink
-$link="http://localhost/agricola/xml/$filename";
+$link="http://agricola.biglinker.ch/xml/$filename";
 
 //Output with Link
 echo "<br> <h2> Die Daten wurden als XML nach <br><a href=\"$link\"> $filename </a> <br> exportiert</h2>";
