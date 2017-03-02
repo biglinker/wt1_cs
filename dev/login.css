@@ -1,7 +1,12 @@
+html {
+    overflow: -moz-scrollbars-vertical; 
+    overflow-y: scroll;
+}
+
 body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
+  /* padding-top: 5px;*/
+  /*padding-bottom: 40px;*/
+  background-color: #efefe9;
 }
 .logo
 
@@ -35,13 +40,14 @@ margin: 0 auto;
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
+/*.form-signin input[type="email"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+*/
+/*.form-signin input[type="password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-}
+}*/

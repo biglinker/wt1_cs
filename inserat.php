@@ -3,7 +3,7 @@ include("session_mgmt.php");
 include("db_connection.php");
 
 //Code während Entwicklung
-	var_dump($_POST);
+	//var_dump($_POST);
 	ini_set("display_errors", 1);
 	error_reporting(E_ALL & ~E_NOTICE);
 	//-----------------
@@ -18,10 +18,10 @@ include("db_connection.php");
 	$result = mysqli_query($conn, $sql);
 
 	if (mysqli_num_rows($result) > 0) {
-	echo "<p>Ausgabe der Datenbank Nachfrage</p>";
+	//echo "<p>Ausgabe der Datenbank Nachfrage</p>";
     // output data of each row
     while($row = mysqli_fetch_array($result)) {
-		var_dump($row);
+		//var_dump($row);
 		
 		$titel = $row['N_titel'];
 		$text = $row['N_beschreibung'];
@@ -33,11 +33,62 @@ include("db_connection.php");
 		
     }
 } else {
-    echo "<p>0 results in DB Nachfrage</p>";
+    $errorMessage = "Keine Resultate mit dieser Nummer</p>";
 }
 
 
-mysqli_close($conn);
+
+//Falls ein Angebot abgegeben wurde
+IF( isset($_POST["btn-angebot"]) ) {
+	//echo "<p>var_Dump POST Angebot</p>";
+	//var_dump($_POST);
+	
+	$error = false;
+	echo " + "; 
+	echo $B_id = $_SESSION["B_id"];
+	echo " + ";
+	echo $N_id = trim(htmlentities($nr, ENT_QUOTES));
+	echo " + ";
+	echo $A_nachricht = trim(htmlentities($_POST["A_nachricht"], ENT_QUOTES));
+	echo " + ";
+	echo $A_menge = trim(htmlentities($_POST["A_menge"], ENT_QUOTES));
+	echo " + ";
+	echo $A_preis = trim(htmlentities($_POST["A_preis"], ENT_QUOTES));
+	echo " + ";
+
+	//sind alle Felder ausgefüllt worden ?
+	IF( empty($B_id) OR empty($N_id) OR empty($A_nachricht) OR empty($A_menge) OR empty($A_preis) ) {
+		$error = true;
+		$errorMessage = "Bitte alle Felder ausfüllen.";	
+	}
+	
+	//Daten in Datenbank einfügen
+	 if(!$error) { 
+		
+		$sql = "INSERT INTO Angebot (B_id, A_zeit, N_id, A_nachricht, A_menge, A_preis) VALUES ('$B_id', CURRENT_TIMESTAMP, '$N_id', '$A_nachricht', '$A_menge', '$A_preis')";
+		//echo "<p>SQL: $sql</p>";
+		//echo $sql;
+		IF( $result = mysqli_query($conn, $sql) ) {
+			$successMessage = "Angebot in Datenbank eingefügt";
+		}
+		else
+		{
+			$errorMessage = "Beim einfügen in die Datenbank ist etwas schiefgelaufen.";		
+			
+		}
+		
+	}
+	
+	
+}
+
+
+
+
+
+
+
+//mysqli_close($conn);
 ?>
 
 <!DOCTYPE html> 
@@ -54,11 +105,7 @@ mysqli_close($conn);
 
 <body>
 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
+
  
 	<!-- Navigation Bar -->
 	<div class="container">
@@ -72,7 +119,26 @@ if(isset($errorMessage)) {
 				<h1>Inserat Anzeigen</h1>
 			</div>
 		</div>
-	</div>	
+		
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
+		</div>
+		<?php		} 	?>	
+		
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>	
+	
+	</div>
 	
 	<!-- Page Content -->
 	<div class="container">
@@ -87,9 +153,29 @@ if(isset($errorMessage)) {
 			</div>
 			
 			<div class="col-md-4">
-				<h2>Angebot erfassen #für eingeloggte User</h2>
+				<h2>Angebot erfassen</h2>
 				
-				<form class="form-horizontal" action="#" method="post">
+				<?php 
+				// User ist nicht eingeloggt
+				IF( !isset($_SESSION['B_id']) ) {
+									
+					
+				?>
+				
+					<p>Bitte melden Sie sich an, um auf dieses Inserat eine Angebot platzieren zu können</p>
+					<p><a href="login.php?fwd=inserat.php?nr=<?php echo $nr?>">Einloggen</a></p>
+				
+				<?php
+				}	
+				?>
+				
+				<?php 
+				// User ist eingeloggt
+				IF( isset($_SESSION['B_id']) ) {
+				
+				?>
+				
+				<form class="form-horizontal" action="inserat.php?nr=<?php echo $nr?>" method="post">
 					<div class="form-group">	
 						<label class="control-label col-sm-3" for="A_nachricht">Nachricht</label>
 						<div class="col-sm-9">
@@ -100,16 +186,25 @@ if(isset($errorMessage)) {
 					<div class="form-group">						
 						<label class="control-label col-sm-3" for="A_menge">Menge</label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" size="40" maxlength="250" name="N_menge" placeholder="Menge">
+							<input type="text" class="form-control" size="40" maxlength="250" name="A_menge" placeholder="Menge">
 						</div>
 					</div>		
 						
 					<div class="form-group">				
 						<label class="control-label col-sm-3" for="A_preis">Preis</label>
 						<div class="col-sm-9">
-							<input type="date" class="form-control" size="40" maxlength="250" id="A_preis" name="A_preis" placeholder="5750.99">
+							<input type="text" class="form-control" size="40" maxlength="250" id="A_preis" name="A_preis" placeholder="5750.99">
 						</div>
 					</div>
+					
+					<div class="form-group">				
+						<label class="control-label col-sm-3" for="A_preis">Inserate-Nummer</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" size="40" maxlength="25" id="N_id" name="N_id" value="<?php echo $nr?>" readonly>
+						</div>
+					</div>
+					
+					<!--<input type="hidden" name="N_id" value="">-->
 					
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-9">
@@ -118,13 +213,16 @@ if(isset($errorMessage)) {
 							</div>
 						</div>
 					</div>
-						
+					
 					<div class="form-group">	
 						    <div class="col-sm-offset-3 col-sm-9">
-								<button type="submit" class="btn btn-default">Angebot platzieren</button>
+								<button type="submit" class="btn btn-default" name="btn-angebot">Angebot platzieren</button>
 							</div>
 					</div>	
 				</form> 
+				<?php
+				}	
+				?>
 			</div>
 		</div>
 	</div>		
