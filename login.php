@@ -58,6 +58,13 @@ if(isset($_POST['B_email'])) {
 				exit();
 				
 			}
+			else
+			{
+				//Wenn kein Weiterleitungsparameter mitgeben wurde, auf Hauptseite weiterleiten
+				echo "<meta http-equiv='refresh' content='0; url=main.php'>";
+				//header("Location: $location_fwd");
+				exit();
+			}
 			
 			
 		}
@@ -160,7 +167,9 @@ if(isset($errorMessage)) {
 		
 			<img src="src/png/logo.png" alt="Agricola-Trade" class="logo">
 	
-			<form action="login.php<?php echo "?fwd=".$_GET['fwd'];  ?>" method="post" class="form-signin">
+			<form action="login.php<?php IF(isset($_GET['fwd'])) { echo "?fwd=".$_GET['fwd']; }
+			  ?>
+			" method="post" class="form-signin">
 				<h2 class="form-signin-heading"> Login </h2><br>
 				E-Mail:<br>
 				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" ><br><br>

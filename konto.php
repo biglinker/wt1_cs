@@ -94,7 +94,27 @@ if(isset($errorMessage)) {
 			<div class="col-md-4">
 				<h1>iX-eM-eL Export</h1>
 				<p>Exportieren Sie die Angebote zu Ihren Inseraten bequem als XML-Datei. Damit können sie das perfekt in ihre bestehende ERM Software einbinden.</p>
-				<p><a class="btn btn-default" href="xml_export.php" role="button">XML-Export starten&raquo;</a></p>
+				<p><a class="btn btn-default" href="xml_export.php" role="button">XML-Export starten &raquo;</a></p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-4">
+				<h1>-</h1>
+				<p>-</p>
+				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>
+			</div>
+			
+			<div class="col-md-4">
+				<h1>-</h1>
+				<p>-</p>
+				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>
+			</div>
+			
+			<div class="col-md-4">
+				<h1>Logout</h1>
+				<p>Sie haben für heute fertig und möchten sich jetzt sicher abmelden</p>
+				<p><a class="btn btn-default" href="logout.php" role="button">Logout &raquo;</a></p>
 			</div>
 		</div>
 

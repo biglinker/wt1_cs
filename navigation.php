@@ -52,7 +52,23 @@
 					</div>
 						<button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
 				</form>
-			  </li>
+			</li>
+			<?php 
+				// User ist nicht eingeloggt
+				IF( !isset($_SESSION['B_id']) ) {
+				?>
+					<li><a href="login.php">Hallo Gast</a></li>
+				<?php
+				}	
+				// User ist eingeloggt
+				IF( isset($_SESSION['B_id']) ) {
+					$user = $_SESSION['B_id'];
+					
+					echo "<li><a href='konto.php'>Hallo User $user</a></li>";
+				
+				}	
+				?>		  
+			  
 		  </ul>
 	</div><!--/.nav-collapse -->
 </nav>
