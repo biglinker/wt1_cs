@@ -68,16 +68,18 @@ include("login_req.php");
 $filename = "export_xml_".date("Y-m-d_H-i",time()).".xml";
 
 
-$mysql = new Mysqli('localhost', 'agricola', 'IBZ@Agri@2017@Web', 'Agricola');
-if ($mysql->connect_errno) {
+//$mysql = new Mysqli('localhost', 'agricola', 'IBZ@Agri@2017@Web', 'Agricola');
+if ($conn->connect_errno) {
     throw new Exception(sprintf("Mysqli: (%d): %s", $mysql->connect_errno, $mysql->connect_error));
 }
 
 //Extract data to export to XML
 $sqlQuery = 'SELECT * FROM Nachfrage';
-if (!$result = $mysql->query($sqlQuery)) {
+if (!$result = $conn->query($sqlQuery)) {
     throw new Exception(sprintf('Mysqli: (%d): %s', $mysql->errno, $mysql->error));
 }
+
+var_dump($result);
 
 //Create new document 
 $dom = new DOMDocument;

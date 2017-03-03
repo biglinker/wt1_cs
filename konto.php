@@ -77,7 +77,10 @@ if(isset($errorMessage)) {
 				<p>Später: Passwort ändern</p>
 			</div>
 		</div>
+	</div>
 		
+	<!-- Page Connet -->
+	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
 				<h1>Inserat hinzufügen</h1>
@@ -92,23 +95,23 @@ if(isset($errorMessage)) {
 			</div>
 			
 			<div class="col-md-4">
-				<h1>iX-eM-eL Export</h1>
+				<h1>XML Export</h1>
 				<p>Exportieren Sie die Angebote zu Ihren Inseraten bequem als XML-Datei. Damit können sie das perfekt in ihre bestehende ERM Software einbinden.</p>
-				<p><a class="btn btn-default" href="xml_export.php" role="button">XML-Export starten &raquo;</a></p>
+				<p><a class="btn btn-default" href="xml.php" role="button">XML-Export starten &raquo;</a></p>
 			</div>
 		</div>
 		
 		<div class="row">
 			<div class="col-md-4">
-				<h1>-</h1>
+			<!--	<h1>-</h1>
 				<p>-</p>
-				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>
+				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>-->
 			</div>
 			
 			<div class="col-md-4">
-				<h1>-</h1>
+			<!--	<h1>-</h1>
 				<p>-</p>
-				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>
+				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>-->
 			</div>
 			
 			<div class="col-md-4">
@@ -121,115 +124,103 @@ if(isset($errorMessage)) {
 		<div class="row">
 			<div class="col-md-12">	
 				<h1>Übersicht über Ihre aktuellen Inserate</h1>	
-			</div>
-		</div>
-	</div>	
 	
 	
-	<div class="container">
+	
  <?php  
   //query  the database table
 	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE Nachfrage.B_id = '$userid'";
   
-  echo $sql;
+  //echo $sql;
   //run  the query against the mysql query function
   $result = mysqli_query($conn, $sql);
 	
-  
+  $B_anz_inserate = mysqli_num_rows($result);
  
- if (mysqli_num_rows($result) > 0) {
+?>
+<h3>Sie haben zurzeit <?php echo $B_anz_inserate; ?> Inserate</h2>	
+<?php
+	
+	
+	if (mysqli_num_rows($result) > 0) {
+		
+		?>
+		<div class="table-responsive">
+			<table class="table table-striped">
+			<tr>
+			<th>Titel</th>
+			<th>Beschreibung</th>
+			<th>Nr</th>
+			<th>Gültig bis</th>
+			<th>Angebote</th>
+			<th>Anzeigen</th>
+			<th>Löschen</th>
+			</tr>
+		<?php
+			
+		
+		
+		
+		
 	// output data of each row
     while($row = mysqli_fetch_array($result)) {
-	var_dump($row);
-	$titel = $row['N_titel'];
-	$text =  substr($row['N_beschreibung'], 0,200);
-	$id = $row['N_id'];
+
+		$titel = substr($row['N_titel'], 0,30);
+		$text = substr($row['N_beschreibung'], 0,60);
+		$id = $row['N_id'];
+		$anz_angebote = $row['AngebotCount'];
+		$frist = $row['N_gueltig_bis'];
+		
+
+
+?>
+<tr>
+<td><?php echo $titel; ?></td>
+<td><?php echo $text; ?></td>
+<td><?php echo $id; ?></td>
+<td><?php echo $frist; ?></td>
+<td><?php echo $anz_angebote; ?></td>
+<td><a href="inserat.php?nr=<?php echo $id;?>" role="button" class="btn btn-info">Anzeigen</a></td>
+<td><a href="delete.php?nr=<?php echo $id;?>" role="button" class="btn btn-danger">Löschen</a></td>
+</tr>
+
+
+<?php
+		
+	}
+	echo "</table></div>";
+ }
+ else {
+	
+	
 	
 	
  ?>
  
  
     
-      <div class="row">
-        <div class="col-md-12">
-          <h2><?php echo $titel; ?></h2>
-          <p> <?php echo $text; ?></p>
-          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
-        </div>
-	  </div>
 	 
 	  
-<?php
-		}
-	} else {
-?>
-
       <div class="row">
         <div class="col-md-12">
           <h2>Leider nichts gefunden</h2>
-          <p>Wir haben keine passenden Einträge in der Datenbank gefunden</p>
+          <p>Wir haben keine passenden Einträge in der Datenbank gefunden, erfassen sie doch gleich in Insarat</p>
+		  <p><a href="new.php">Jetzt Nachfrage-Inserat erstellen</a></p>
         </div>
 	  </div>
+	  
+	  		</div>
+		</div>
+	</div>	
 
-<?php  }	
+	
+<?php	}
 ?>
 	
-	
-	
-	
-	
-	
-	<!-- Page Content -->
-	<div class="container">
-		<div class="row">
-			<div class="col-md-8">
-				<h1>Übersicht über Ihre aktuellen Inserate</h1>
-				
-				
-			
-				<h2><?php echo $titel;  ?></h2>
-				<p><?php echo $text;  ?></p>
-				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
-				<p><strong>gewünschte Menge: </strong> <?php echo $menge  ?></p>
-				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
-				<p>Inserat-Nr <?php echo $nr;  ?></p>
-			</div>
-		</div>	
-	
-	
-		<div class="row">
-			<div class="col-md-8">
-				<h2><?php echo $titel;  ?></h2>
-				<p><?php echo $text;  ?></p>
-				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
-				<p><strong>gewünschte Menge: </strong> <?php echo $menge  ?></p>
-				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
-				<p>Inserat-Nr <?php echo $nr;  ?></p>
-			</div>
-		</div>		
-	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<!-- Footer -->	
-	
-	<footer>
-      <div class="container">
-		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
-      </div>
-	</footer>
 
+	<!-- Footer -->	
+	<?php include "footer.php";  ?>
+	
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>

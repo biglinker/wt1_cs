@@ -25,25 +25,38 @@ include("db_connection.php");
 </head> 
 
 <body>
- 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
- 
+  
 	<!-- Include Navigation Bar -->
 	<div class="container">
 		<?php include("navigation.php"); ?>
 	</div>
-	
+		
 	<!-- Page Header -->
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h1>Inserate Suche</h1>
+				<h1>Inserate Suchen</h1>
 			</div>
 		</div>
+		
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
+		</div>
+		<?php		} 	?>	
+		
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>	
+	
 	</div>	
  
  
