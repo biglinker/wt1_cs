@@ -139,6 +139,7 @@ echo "<br> ";
 		</div>
 	</div>
 
+	<!-- Footer -->
 	<?php include "footer.php"; ?>
 
     <!-- Bootstrap core JavaScript -->

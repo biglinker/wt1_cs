@@ -192,11 +192,9 @@ IF( isset($_POST["btn-save"]) ) {
 		</div>
 	</div>
    
-   
-
+ 
 	<!-- Footer -->
 	<?php include "footer.php" ?>
-	
 
 </div>
 

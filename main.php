@@ -139,8 +139,6 @@ if(isset($errorMessage)) {
 	<br>
 	</div>
 	
-   </div>
- 
  
  
  
@@ -162,13 +160,9 @@ if(isset($errorMessage)) {
 
 -->
 
-<footer>
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
-      </div>
 
-</footer>
+
+	<?php include "footer.php"; ?>
 
 
     <!-- Bootstrap core JavaScript -->
