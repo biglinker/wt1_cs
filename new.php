@@ -179,11 +179,8 @@ IF( !empty($_POST) ) {
 		</div>
 	</div>
 
-	<footer>
-		<div class="container">
-			<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
-		</div>
-	</footer>
+	<!-- Footer -->
+	<?php include "footer.php"; ?>
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

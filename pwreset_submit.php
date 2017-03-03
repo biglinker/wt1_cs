@@ -46,10 +46,12 @@ if(isset($errorMessage)) {
 	   <Br> Überprüfen sie ihren Posteingang, um den Anweisungen zu folgen</h2><br><br><br>
 		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
       </div>
+	  </div>
 
-	</footer>
+	<!-- Footer -->
+	<?php include "footer.php"; ?>
 
-</div>
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

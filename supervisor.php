@@ -1,8 +1,0 @@
-﻿<?php
-/* Kommentar */
-
-
-$restricted = true;
-
-
-?>
