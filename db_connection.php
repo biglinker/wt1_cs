@@ -1,6 +1,5 @@
-﻿<?php
-
-//Datenbankverbindung zur Verf??g stellen
+<?php
+//Datenbankverbindung zur Verfügung stellen
 // Enter MySQL infos
 $mysqlHost = 'localhost';
 $mysqlUsername = 'agricola';
