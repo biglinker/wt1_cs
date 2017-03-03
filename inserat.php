@@ -79,9 +79,7 @@ IF( isset($_POST["btn-angebot"]) ) {
 		
 	}
 	
-	
 }
-
 
 //mysqli_close($conn);
 ?>

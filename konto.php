@@ -52,12 +52,6 @@ include "login_req.php";
 </head> 
 
 <body>
-
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
  
 	<!-- Navigation Bar -->
 	<div class="container">
@@ -71,13 +65,33 @@ if(isset($errorMessage)) {
 				<h1>Konto Übersicht</h1>
 				
 				<h3>Hallo User <?php echo $userid; ?> </h3>
-				<p>Inserate anzeigen / löschen</p>
+				<!--<p>Inserate anzeigen / löschen</p>
 				<p>Benutzerangaben ändern </p>
 				<p>Angebote zu inseraten als xml File per Mail</p>
-				<p>Später: Passwort ändern</p>
+				<p>Später: Passwort ändern</p>-->
 			</div>
+
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
 		</div>
+		<?php		} 	?>	
+		
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>	
+	
+	</div>	
 	</div>
+	
 		
 	<!-- Page Connet -->
 	<div class="container">
@@ -91,7 +105,7 @@ if(isset($errorMessage)) {
 			<div class="col-md-4">
 				<h1>Benutzerangaben anpassen</h1>
 				<p>Ändern Sie hier Ihre persönlichen Angaben wie z.B. Ihre Firmen-Adresse, Email-Adresse, etc.</p>
-				<p><a class="btn btn-default" href="#" role="button">Meine Daten bearbeiten &raquo;</a></p>
+				<p><a class="btn btn-default" href="userdata.php" role="button">Meine Daten bearbeiten &raquo;</a></p>
 			</div>
 			
 			<div class="col-md-4">

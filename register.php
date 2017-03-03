@@ -1,95 +1,55 @@
 ﻿<?php 
-session_start();
-
+include("session_mgmt.php");
+include("db_connection.php");
 
 //Only for development
 ini_set("display_errors", 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
-include("db_connection.php");
-//PDO ist doof, kommentar von PS
-//$pdo = new PDO('mysql:host=localhost;dbname=Agricola', 'agricola', 'IBZ@Agri@2017@Web');
-?>
 
-<!DOCTYPE html> 
-<html> 
-<head>
-  <title>Agricola-Trade</title> 
-  
-  <!-- Boostrap CSS -->
-  <link href="res/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="res/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-  
-  <link href="dev/login.css" rel="stylesheet">
-</head> 
-
-<body>
- 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
 ?>
- 
-	<!-- Include Navigation Bar -->
-	<div class="container">
-		<?php include("navigation.php"); ?>
-	</div>
- 
- <!-- Page Content -->
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-12">
-			<h1>Registrieren</h1>
-			
-			
-<!-- Loginskript von php-einfach.de -->			
 
 <?php
+//var_dump($_POST);
  
 if(isset($_GET['register'])) {
- $error = false;
+	$error = false;
  
- $email = strtolower($_POST['B_email']);
- $passwort = $_POST['B_passwort'];
- $firma = $_POST['B_firma'];
- $name = $_POST['B_name'];
- $vname = $_POST['B_vname'];
- $strasse = $_POST['B_strasse'];
- $strasse_nr = $_POST['B_strasse_nr'];
- $plz = $_POST['B_plz'];
- $ort = $_POST['B_ort'];
-
+	$email = strtolower($_POST['B_email']);
+	$passwort = $_POST['B_passwort'];
+ 
+	$B_firma = trim(htmlentities($_POST["B_firma"], ENT_QUOTES));
+	$B_name = trim(htmlentities($_POST["B_name"], ENT_QUOTES));
+	$B_vname = trim(htmlentities($_POST["B_vname"], ENT_QUOTES));
+	$B_strasse = trim(htmlentities($_POST["B_strasse"], ENT_QUOTES));
+	$B_strasse_nr = trim(htmlentities($_POST["B_strasse_nr"], ENT_QUOTES));
+	$B_plz = trim(htmlentities($_POST["B_plz"], ENT_QUOTES));
+	$B_ort = trim(htmlentities($_POST["B_ort"], ENT_QUOTES));
+ 
   
  if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-	echo 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
+	$errorMessage = 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
 	$error = true;
  } 
  
  if(strlen($passwort) == 0) {
-	echo 'Bitte ein Passwort angeben<br>';
+	$errorMessage = 'Bitte ein Passwort angeben<br>';
 	$error = true;
  }
- 
-// if($passwort != $passwort2) {
-//echo 'Die Passwörter müssen übereinstimmen<br>';
-//$error = true;
-// }
- 
+  
  //Überprüfe, dass die E-Mail-Adresse noch nicht registriert wurde
  if(!$error) { 
  	$sql = "SELECT * FROM Benutzer WHERE B_email = '$email'";
 	$result = mysqli_query($conn, $sql);
-	echo $sql;
-	var_dump($result);
+	//echo $sql;
+	//var_dump($result);
 //	$statement = $pdo->prepare("SELECT * FROM Benutzer WHERE B_email = :B_email");
 //	$result = $statement->execute(array('B_email' => $email));
 //	$user = $statement->fetch();
  
 	if(mysqli_num_rows($result) > 0) {
-	echo 'Diese E-Mail-Adresse ist bereits vergeben<br>';
-	$error = true;
+		$errorMessage = 'Diese E-Mail-Adresse ist bereits vergeben<br>';
+		$error = true;
 	} 
  }
  
@@ -97,9 +57,10 @@ if(isset($_GET['register'])) {
  if(!$error) { 
 	$passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
  
-	//Aktuell werden nur die 2 Felder Email und Passwort Hash in die Datenbank gespeichert
- 	$sql = "INSERT INTO Benutzer (B_email, B_password)
-		VALUES ('$email','$passwort_hash')";	
+	//Aktuell werden nur die 2 Felder Email und Passwort Hash in die Datenbank gespeichert	
+	$sql = "INSERT INTO Benutzer (B_email, B_password, B_firma, B_name, B_vname, B_strasse, B_strasse_nr, B_plz, B_ort)
+		VALUES ('$email','$passwort_hash','$B_firma','$B_name','$B_vname','$B_strasse','$B_strasse_nr','$B_plz','$B_ort')";	
+		
  	$result = mysqli_query($conn, $sql);
  
  
@@ -122,7 +83,7 @@ if(isset($_GET['register'])) {
  ));*/
  
  //Ausgabe während der Entwicklungsphase für Fehlersuche
- echo "<p>SQL Fehler anzeigen</p>";
+ /*echo "<p>SQL Fehler anzeigen</p>";
  echo mysqli_error($conn);
  echo "<br><br>"; 
  
@@ -136,70 +97,159 @@ if(isset($_GET['register'])) {
  
  echo "<p>Variable db Statement</p>";
  var_dump($statement);
- echo "<br><br>";
+ echo "<br><br>";*/
  
  //-------------
  
  if($result) { 
- echo 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
+	$successMessage = 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
 
  } else {
- echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
+	$errorMessage = 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
  }
  } 
 }
-?>			
-			
-			
-			
-			<p>
-			
-			<form class="form-horizontal" action="?register=1" method="post">
-				
-				<br>
-				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" placeholder="E-Mail:">
-				<br><br>
-				 
-				Dein Passwort:
-				<br>
-				<input type="password" class="form-control" size="40"  maxlength="250" name="B_passwort">
-				<br>				
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_firma" placeholder="Firmennamen:">
-				<br>
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_name" placeholder="Name:">
-				<br>			
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_vname" placeholder="Vorname:">
-				<br>
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_strasse" placeholder="Strasse:">
-				<br>
-				<input type="text" class="form-control" size="40" maxlength="50" name="B_strasse_nr" placeholder="Strassennr:">
-				<br>
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_plz" placeholder="Postleitzahl:">
-				<br>
-				<input type="text" class="form-control" size="40" maxlength="250" name="B_ort" placeholder="Ort:">
-				<br>
-				<input class="btn btn-default" type="submit" value="Registrieren">
-			</form>
+?>	
 
-</p>
+<!DOCTYPE html> 
+<html> 
+<head>
+  <title>Agricola-Trade</title> 
+  
+  <!-- Boostrap CSS -->
+  <link href="res/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="res/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+  
+  <link href="dev/login.css" rel="stylesheet">
+</head> 
 
-
-
-</p>
-			
+<body>
+  
+	<!-- Include Navigation Bar -->
+	<div class="container">
+		<?php include("navigation.php"); ?>
+	</div>
+ 
+	<!-- Page Header -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Registrieren</h1>
+			</div>
+		</div>
 		
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
+		</div>
+		<?php		} 	?>	
 		
-        </div>
-      </div>
-   </div>
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>		
+	</div>
+ 
+   
+   <!-- Page Content -->
+    <div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<form class="form-horizontal" action="?register=1" method="post">
 
-	<footer>
-      <div class="container">
-       
-		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
-      </div>
+					<div class="form-group">					
+						<label class="control-label col-sm-2" for="B_email">E-Mail</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control input-lg" size="40" maxlength="250" name="B_email" placeholder="E-Mail">
+						</div>
+					</div>
 
-	</footer>
+					<div class="form-group">	
+						<label class="control-label col-sm-2" for="B_passwort">Passwort</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control input-lg" size="40"  maxlength="250" name="B_passwort">
+						</div>
+					</div>
+
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_firma">Firmenname</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_firma" placeholder="Firmenname">						
+						</div>
+					</div>
+
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_name">Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_name" placeholder="Name">						
+						</div>
+					</div>
+					
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_vname">Vorname</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_vname" placeholder="Vorname">						
+						</div>
+					</div>
+					
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_strasse">Strasse</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_strasse" placeholder="Strasse">							
+						</div>
+					</div>
+					
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_strasse_nr">Strassennr</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="50" name="B_strasse_nr" placeholder="Strassennr">					
+						</div>
+					</div>
+
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_plz">PLZ</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_plz" placeholder="Postleitzahl">					
+						</div>
+					</div>	
+
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="B_ort">Ort</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_ort" placeholder="Ort">					
+						</div>
+					</div>					
+					
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox">
+								<label><input type="checkbox">AGB von Agricola-Trade akzeptieren</label>
+							</div>
+						</div>
+					</div>
+						
+					<div class="form-group">	
+						    <div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-default">Erfassen</button>
+							</div>
+					</div>	
+				</form> 
+			</div>
+		</div>
+	</div>
+   
+   
+
+	<!-- Footer -->
+	<?php include "footer.php" ?>
+	
 
 </div>
 
