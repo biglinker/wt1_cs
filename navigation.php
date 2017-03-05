@@ -31,6 +31,7 @@
 					<li class="dropdown-header">Inserieren</li>
 					<li role="separator" class="divider"></li>
 					<li><a href="new.php">Inserat erfassen</a></li>
+					<li><a href="suche.php">Suchen</a></li>
 				</ul>
             </li>
 			
@@ -46,9 +47,9 @@
 			<!-- Suchfeld -->
 			<li>
 			  <!-- Suche in DB -->
-			  <form class="navbar-form navbar-left" action="suche.php" method="post" id="searchform" role="search" >
+			  <form class="navbar-form navbar-left" action="suche.php" method="get" id="searchform" role="search" >
 					<div class="form-group">
-						<input type="text" name="name" size="60" class="form-control" placeholder="Suchen...">
+						<input type="text" name="search" size="55" class="form-control" placeholder="Suchen...">
 					</div>
 						<button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
 				</form>

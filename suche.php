@@ -2,14 +2,11 @@
 include("session_mgmt.php");
 include("db_connection.php");
 
-
-//Code während Entwicklung
-	var_dump($_POST);
+	//Code während Entwicklung
 	ini_set("display_errors", 1);
 	error_reporting(E_ALL & ~E_NOTICE);
 	//-----------------
 	
-
 
 ?>
 <!DOCTYPE html> 
@@ -33,12 +30,6 @@ include("db_connection.php");
 		
 	<!-- Page Header -->
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h1>Inserate Suchen</h1>
-			</div>
-		</div>
-		
 		<!-- Fehler Ausgabe -->
 		<?php 
 			if(isset($errorMessage)) {
@@ -57,43 +48,88 @@ include("db_connection.php");
 		</div>
 		<?php		} 	?>	
 	
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Inserate Suchen</h1>
+				<h2>Such-Parameter</h2>
+<form class="form-horizontal" action="suche.php" method="get">
+
+					<div class="form-group">					
+						<label class="control-label col-sm-2" for="search">Suchen nach</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="search" value="<?php if(isset($_GET['search'])){ echo $_GET['search'];}?>" placeholder="Suchbegriffe eingeben">
+						</div>
+					</div>
+	
+					<div class="form-group">	
+						    <div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-default">Suchen</button>
+							</div>
+					</div>	
+				</form> 
+				
+			</div>
+		</div>
+		
+
+	
 	</div>	
  
  
- <!-- Search Content -->
+	<!-- Search Content -->
 	<div class="container">
-		
+		<div class="row">
+			<div class="col-md-12">
+    				<h2>Ergebnisse</h2>
+				</div>
+			</div>
  
  
  <?php
-   if(isset($_POST['name'])){
-  $name = $_POST['name'];
-   
-  //query  the database table
-  $sql="SELECT N_titel, N_beschreibung, N_qualitaet, N_menge, N_id FROM Nachfrage  WHERE N_titel LIKE '%" . $name ."%'";
-  
-  //echo $sql;
-  //run  the query against the mysql query function
-  $result=mysqli_query($conn, $sql);
+	if(isset($_GET['search'])){
+		$search = $_GET['search'];
 	
+	
+	//Case
+	
+	
+	
+	
+	
+	//query  the database table
+	$sql="SELECT * FROM Nachfrage  WHERE N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
+  
+	//run  the query against the mysql query function
+	$result=mysqli_query($conn, $sql);
+  
+	IF( mysqli_num_rows($result) < 2 ){
+	    //Ersetze im Search-Query die Leerzeichen durch % um mehr Treffer zu erzielen
+		$search = str_replace(" ","%", $search);
+		$sql="SELECT * FROM Nachfrage  WHERE N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
+ 
+		$result=mysqli_query($conn, $sql);
+	}
   
  
- if (mysqli_num_rows($result) > 0) {
+ if ($counts = mysqli_num_rows($result) > 0) {
 	// output data of each row
     while($row = mysqli_fetch_array($result)) {
 
 	$titel = $row['N_titel'];
 	$text =  substr($row['N_beschreibung'], 0,200);
 	$id = $row['N_id'];
+	$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
 	
  ?>
  
  
-    
+
+					
       <div class="row">
         <div class="col-md-12">
-          <h2><?php echo $titel; ?></h2>
+          <h3><?php echo $titel; ?></h3>
           <p> <?php echo $text; ?></p>
+		  <p><small><strong>Inseriert am: </strong> <?php echo $datum_erstellt; ?></small></p>
           <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
         </div>
 	  </div>
@@ -106,8 +142,8 @@ include("db_connection.php");
 
       <div class="row">
         <div class="col-md-12">
-          <h2>Leider nichts gefunden</h2>
-          <p>Wir haben keine passenden Einträge in der Datenbank gefunden</p>
+          <h3>Leider nichts gefunden</h3>
+          <p>Wir haben keine passenden Einträge in der Datenbank gefunden.</p>
         </div>
 	  </div>
 
@@ -115,13 +151,11 @@ include("db_connection.php");
 
 
 
-
-
 }
 else
 {
-//Keine Eingabe über das Suchfeld
-echo "<p>Benutzen Sie das Suchfeld um nach Inseraten zu suchen</p>";
+	//Keine Eingabe über das Suchfeld
+	echo "<p>Benutzen Sie das Suchfeld um nach Inseraten zu suchen</p>";
 	
 	
 }

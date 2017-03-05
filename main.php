@@ -9,13 +9,10 @@ ini_set("display_errors", 1);
 error_reporting(E_ALL & ~E_NOTICE);
 
 
-
-
 	$nr = $_GET['nr'];
 
 
-
-	$sql = "SELECT * FROM Nachfrage WHERE N_id = 1 LIMIT 1";
+/*	$sql = "SELECT * FROM Nachfrage WHERE N_id = 1 LIMIT 1";
 	//echo $sql;
 	$result = mysqli_query($conn, $sql);
 
@@ -36,11 +33,10 @@ error_reporting(E_ALL & ~E_NOTICE);
     }
 } else {
     echo "<p>0 results in DB Nachfrage</p>";
-}
+}*/
 
 
-mysqli_close($conn);
-?>
+//mysqli_close($conn);
 ?>
 <head>
   <title>Agricola-Trade</title> 
@@ -53,13 +49,7 @@ mysqli_close($conn);
 </head> 
 
 <body>
- 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
- 
+  
 	<!-- Include Navigation Bar -->
 	<div class="container">
 		<?php include("navigation.php"); ?>
@@ -67,106 +57,172 @@ if(isset($errorMessage)) {
  
 	<!-- Page Header -->
 	<div class="container">
+	
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
+		</div>
+		<?php		} 	?>	
+		
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>	
+	
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-3">
+				<p><img src="src/png/logo.png" alt="Agricola-Trade" style="max-height:250px" class="img-responsive"></p>
+				<br>
+			</div>
+			<div class="col-md-9">
 				<h1>Willkommen bei Agricola-Trade!</h1>
 				<h2>Der B2B Plattform für den Schweizer Agrar-Bereich</h2>
-				
 				<!-- Horizontale Linie -->
-				<hr style="border:#000000 1px; background-color:#000000;height:1px;width:75%;" align="left">
+				<hr style="border:#333 1px; background-color:#333;height:1px;width:75%;" align="left">
+				<p>Wir bringen Händler, Produzenten, Hersteller aus der Agro-Branche näher zusammen. Wir erweitern gleichzeitig für Produzenten die Anzahl Abnehmer, sowie für Abnehmer und Händler die Anzahl Lieferanten. Einfacher Kaufen und Verkaufen, B2B mit Agricola-Trade.</p>
 			</div>
+
 		</div>
 	</div>
   
- <!-- Page Content -->
+	<!-- Page Content -->
     <div class="container">
-      <!-- Example row of columns -->
+		<div class="row">
+			<div class="col-md-12"><h3>Die neusten 3 Nachfragen</h3></div>				
+		</div>
+	
       <div class="row">
+		
+
+		
+			<?php   
+	//query  the database table
+	$sql="SELECT * FROM Nachfrage WHERE 1 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+  
+	//run  the query against the mysql query function
+	$result=mysqli_query($conn, $sql);
+    
+ 
+ if (mysqli_num_rows($result) > 0) {
+	// output data of each row
+    while($row = mysqli_fetch_array($result)) {
+
+	$titel = $row['N_titel'];
+	$text =  substr($row['N_beschreibung'], 0,200);
+	$id = $row['N_id'];
+	$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
+	
+ ?>
+ 
+
         <div class="col-md-4">
-          <h2><?php echo $titel;  ?></h2>
-          
-				<p><?php echo $text;  ?></p>
-				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
-				<p><strong>gewünschte Menge: </strong> <?php echo $menge . " " . $menge_einheit ?></p>
-				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
-				<p>Inserat-Nr <?php echo $nr;  ?></p>
-          <p><a class="btn btn-default" href="inserat.php?nr=1" role="button">View details &raquo;</a></p>
+          <h3><?php echo $titel; ?></h3>
+          <p> <?php echo $text; ?></p>
+		  <p><small><strong>Inseriert am: </strong> <?php echo $datum_erstellt; ?></small></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
         </div>
-        <div class="col-md-4">
-          <h2>Top Inserat 2</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="inserat.php?nr=2" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-md-4">
-          <h2>Top Inserat 3</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn btn-default" href="inserat.php?nr=3" role="button">View details &raquo;</a></p>
+		
+ <?php  }}  ?>	
         </div>
-      </div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<h3>3 Nachfragen ohne Angebote</h3>
+			</div>
+		</div>	
+
+		<div class="row">		
+		
+		<?php   
+	//query  the database table
+  	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE 'AngebotCount' = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3 ";
+	//run  the query against the mysql query function
+	$result=mysqli_query($conn, $sql);
+    
+ 
+ if (mysqli_num_rows($result) > 0) {
+	// output data of each row
+    while($row = mysqli_fetch_array($result)) {
+
+	$titel = $row['N_titel'];
+	$text =  substr($row['N_beschreibung'], 0,200);
+	$id = $row['N_id'];
+	$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
+	
+ ?>	
+
+        <div class="col-md-4">
+          <h3><?php echo $titel; ?></h3>
+          <p> <?php echo $text; ?></p>
+		  <p><small><strong>Inseriert am: </strong> <?php echo $datum_erstellt; ?></small></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
+        </div>
+		
+ <?php  }}  ?> 
+	</div>
+	
+	
+		<div class="row">
+			<div class="col-md-12">
+				<h3>3 zufällige Inserate</h3>
+			</div>
+		</div>	
+
+		<div class="row">		
+		
+		<?php   
+	//query  the database table
+  	$sql = "SELECT * FROM Nachfrage WHERE 1 ORDER BY RAND() LIMIT 3 ";
+	//run  the query against the mysql query function
+	$result=mysqli_query($conn, $sql);
+    
+ 
+	if (mysqli_num_rows($result) > 0) {
+	// output data of each row
+    while($row = mysqli_fetch_array($result)) {
+
+	$titel = $row['N_titel'];
+	$text =  substr($row['N_beschreibung'], 0,200);
+	$id = $row['N_id'];
+	$datum_erstellt = date("j.n.Y", strtotime($row['N_erstellt']));
+	
+ ?>	
+
+        <div class="col-md-4">
+          <h3><?php echo $titel; ?></h3>
+          <p> <?php echo $text; ?></p>
+		  <p><small><strong>Inseriert am: </strong> <?php echo $datum_erstellt; ?></small></p>
+          <p><a class="btn btn-default" href="inserat.php?nr=<?php echo $id; ?>" role="button">Inserat anzeigen &raquo;</a></p>
+        </div>
+		
+ <?php  }}  ?> 
+	</div>
+	
+		
+		
+		
+		
+		
 	  
  	
-	<div class="row">
-        <div class="col-md-6">
-          <h2>1</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-		
-        <div class="col-md-6">
-          <h2>2</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>		
+		<div class="row">
+				
+		</div>
+	
+	
 	</div>
 	
-	<!-- Brauchts möglicherweise gar nicht.
-	
-	    <div class="row">
-        <div class="col-md-6">
-          <h2>Registrieren/Mitmachen</h2>
-          <p>Anmeldebereich für Neue Mitglieder </p>
-          <p><a class="btn btn-default" href="register.php" role="button">Registrieren &raquo;</a></p>
-        </div>
-		
-        <div class="col-md-6">
-          <h2>Login</h2>
-          <p>Hier gehts zum Login. Logge dich zuerst ein bevor du ein neues Insereat erfasst </p>
-          <p><a class="btn btn-default" href="login.php" role="button">Login &raquo;</a></p>
-        </div> 
-	-->		
-	
-	<br>
-	<br>
-	</div>
-	
- 
- 
- 
- 
- 
- <!--
- <img src="src/png/logo.png" alt="Agricola-Trade" class="logo"></img>
-	
-	<form action="?login=1" method="post" class="form-signin">
-	<h2 class="form-signin-heading"> Login </h2><br>
-	E-Mail:<br>
-	<input type="email" size="40" maxlength="250" name="email" class="form-control"><br><br>
- 
-	Dein Passwort:<br>
-	<input type="password" size="40"  maxlength="250" name="passwort" class="form-control"><br>
- 
-	<input type="submit" value="Login" class="btn btn-lg btn-primary btn-block">
-</form> 
-
--->
-
-
 
 	<?php include "footer.php"; ?>
 
-
     <!-- Bootstrap core JavaScript -->
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="res/bootstrap/js/bootstrap.min.js"></script>

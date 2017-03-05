@@ -206,20 +206,18 @@ include "login_req.php";
  }
  else {
 	
-	
-	
+
 	
  ?>
  
  
-    
-	 
-	  
+ 
+
       <div class="row">
         <div class="col-md-12">
           <h2>Leider nichts gefunden</h2>
           <p>Wir haben keine passenden Einträge in der Datenbank gefunden, erfassen sie doch gleich in Insarat</p>
-		  <p><a href="new.php">Jetzt Nachfrage-Inserat erstellen</a></p>
+		  <p><a href="new.php" class="btn btn-primary" role="button">Jetzt Nachfrage-Inserat erstellen &raquo;</a></p>
         </div>
 	  </div>
 	  

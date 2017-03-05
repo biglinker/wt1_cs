@@ -65,42 +65,6 @@ if(isset($_GET['register'])) {
  
  
  
-	//$statement = $pdo->prepare("INSERT INTO Benutzer (B_email, B_passwort, B_firma, B_name, B_vname, B_strasse, B_strasse_nr, B_plz, B_ort) 
-	//VALUES (:B_email, :B_passwort, :B_firma, :B_name, :B_vname, :B_strasse, :B_strasse_nr, :B_plz, :B_ort)");
- 
- //$result = $statement->
-
- /*execute(array(
- 'B_email' => $email, 
- 'B_passwort' => $passwort_hash, 
- 'B_firma' => $firma, 
- 'B_name' => $name, 
- 'B_vname' => $vname,
- 'B_strasse' => $strasse,
- 'B_strasse_nr' => $strasse_nr,
- 'B_plz' => $plz,
- 'B_ort' => $ort,  
- ));*/
- 
- //Ausgabe während der Entwicklungsphase für Fehlersuche
- /*echo "<p>SQL Fehler anzeigen</p>";
- echo mysqli_error($conn);
- echo "<br><br>"; 
- 
- echo "<p>Variable db SQL</p>";
- var_dump($sql);
- echo "<br><br>";
- 
- echo "<p>Variable db Result</p>";
- var_dump($result);
- echo "<br><br>";
- 
- echo "<p>Variable db Statement</p>";
- var_dump($statement);
- echo "<br><br>";*/
- 
- //-------------
- 
  if($result) { 
 	$successMessage = 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
 
@@ -132,12 +96,7 @@ if(isset($_GET['register'])) {
  
 	<!-- Page Header -->
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h1>Registrieren</h1>
-			</div>
-		</div>
-		
+	
 		<!-- Fehler Ausgabe -->
 		<?php 
 			if(isset($errorMessage)) {
@@ -155,9 +114,15 @@ if(isset($_GET['register'])) {
 			<strong>Erfolg! </strong><?php echo $successMessage; ?>
 		</div>
 		<?php		} 	?>		
+	
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Registrieren</h1>
+			</div>
+		</div>
+		
 	</div>
  
-   
    <!-- Page Content -->
     <div class="container">
 		<div class="row">
@@ -245,11 +210,8 @@ if(isset($_GET['register'])) {
 		</div>
 	</div>
    
-   
-
 	<!-- Footer -->
 	<?php include "footer.php" ?>
-	
 
 </div>
 
