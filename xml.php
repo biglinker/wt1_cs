@@ -72,7 +72,7 @@ include("login_req.php");
  <?php
    
 	//query  the database table
-	$sql="SELECT * FROM Nachfrage JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.B_id = '$user' ";
+	$sql="SELECT * FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.B_id = '$user' ";
   
 	//echo $sql;
 	//run  the query against the mysql query function
