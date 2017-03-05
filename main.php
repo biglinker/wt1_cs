@@ -143,7 +143,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 		<?php   
 	//query  the database table
   	//$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE 'AngebotCount' = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3 ";
-	$sql = "SELECT * FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+	//$sql = "SELECT Nachfrage.N_id, N_beschreibung, N_titel, N_erstellt FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+	$sql = "SELECT Nachfrage.N_id, N_beschreibung, N_titel, N_erstellt FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
     
@@ -151,6 +152,7 @@ error_reporting(E_ALL & ~E_NOTICE);
  if (mysqli_num_rows($result) > 0) {
 	// output data of each row
     while($row = mysqli_fetch_array($result)) {
+	//	var_dump($row);
 
 	$titel = $row['N_titel'];
 	$text =  substr($row['N_beschreibung'], 0,200);
