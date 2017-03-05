@@ -142,7 +142,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 		
 		<?php   
 	//query  the database table
-  	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE 'AngebotCount' = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3 ";
+  	//$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE 'AngebotCount' = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3 ";
+	$sql = "SELECT * FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
     
