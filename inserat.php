@@ -44,7 +44,7 @@ IF( isset($_POST["btn-angebot"]) ) {
 	//var_dump($_POST);
 	
 	$error = false;
-	echo " + "; 
+	/*echo " + "; 
 	echo $B_id = $_SESSION["B_id"];
 	echo " + ";
 	echo $N_id = trim(htmlentities($nr, ENT_QUOTES));
@@ -54,7 +54,7 @@ IF( isset($_POST["btn-angebot"]) ) {
 	echo $A_menge = trim(htmlentities($_POST["A_menge"], ENT_QUOTES));
 	echo " + ";
 	echo $A_preis = trim(htmlentities($_POST["A_preis"], ENT_QUOTES));
-	echo " + ";
+	echo " + ";*/
 
 	//sind alle Felder ausgefüllt worden ?
 	IF( empty($B_id) OR empty($N_id) OR empty($A_nachricht) OR empty($A_menge) OR empty($A_preis) ) {
