@@ -59,6 +59,7 @@ IF( isset($_POST["btn-save"]) ) {
 	//echo "<p>Ausgabe der Datenbank Nachfrage</p>";
     // output data of each row
     while($row = mysqli_fetch_array($result)) {
+		$B_email = $row['B_email'];
 		$B_firma = $row['B_firma'];
 		$B_name = $row['B_name'];
 		$B_vname = $row['B_vname'];
@@ -129,7 +130,7 @@ IF( isset($_POST["btn-save"]) ) {
 					<div class="form-group">					
 						<label class="control-label col-sm-2" for="B_email">E-Mail</label>
 						<div class="col-sm-10">
-							<input type="email" class="form-control input-lg" size="40" maxlength="250" name="B_email" placeholder="E-Mail" readonly>
+							<input type="email" class="form-control input-lg" size="40" maxlength="250" name="B_email" value="<?php echo $B_email; ?>" readonly>
 						</div>
 					</div>
 

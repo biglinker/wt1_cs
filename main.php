@@ -104,7 +104,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 		
 			<?php   
 	//query  the database table
-	$sql="SELECT * FROM Nachfrage WHERE 1 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+	$sql="SELECT * FROM Nachfrage WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+	//echo $sql;
   
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
@@ -144,7 +145,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 	//query  the database table
   	//$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE 'AngebotCount' = 0 ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3 ";
 	//$sql = "SELECT Nachfrage.N_id, N_beschreibung, N_titel, N_erstellt FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
-	$sql = "SELECT Nachfrage.N_id, N_beschreibung, N_titel, N_erstellt FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
+	$sql = "SELECT Nachfrage.N_id, N_beschreibung, N_titel, N_erstellt FROM Nachfrage LEFT JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 AND Angebot.A_id IS NULL ORDER BY `Nachfrage`.`N_erstellt` DESC LIMIT 3";
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
     
@@ -182,7 +183,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 		
 		<?php   
 	//query  the database table
-  	$sql = "SELECT * FROM Nachfrage WHERE 1 ORDER BY RAND() LIMIT 3 ";
+  	$sql = "SELECT * FROM Nachfrage WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 ORDER BY RAND() LIMIT 3 ";
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
     

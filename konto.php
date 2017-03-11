@@ -6,40 +6,14 @@ include "db_connection.php";
 
 include "login_req.php";
 
-//Code während Entwicklung
+	//Code während Entwicklung
 	ini_set("display_errors", 1);
 	error_reporting(E_ALL & ~E_NOTICE);
-	//-----------------
-
 
 	$nr = $_GET['nr'];
 
 	$userid = $_SESSION['B_id'];
 
-	/*$sql = "SELECT * FROM Nachfrage WHERE B_id = '$userid' LIMIT 1";
-	//echo $sql;
-	$result = mysqli_query($conn, $sql);
-
-	if (mysqli_num_rows($result) > 0) {
-	echo "<p>Ausgabe der Datenbank Nachfrage</p>";
-    // output data of each row
-    while($row = mysqli_fetch_array($result)) {
-		var_dump($row);
-		
-		$titel = $row['N_titel'];
-		$text = $row['N_bescheibung'];
-		$quali = $row['N_qualitaet'];
-		$datum_erstellt = date("j.n.Y", $row['N_erstellt']);
-		$datum_ablauf = date("j.n.Y",$row['N_gueltig_bis']);
-		$menge = $row['N_menge'];
-		
-    }
-} else {
-    echo "<p>0 results in DB Nachfrage</p>";
-}*/
-
-
-//mysqli_close($conn);
 ?>
 <head>
   <title>Agricola-Trade</title> 
@@ -143,7 +117,7 @@ include "login_req.php";
 	
  <?php  
   //query  the database table
-	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE Nachfrage.B_id = '$userid'";
+	$sql = "SELECT *, (SELECT COUNT(Angebot.N_id) FROM Angebot WHERE Angebot.N_id = Nachfrage.N_id) AS AngebotCount FROM Nachfrage WHERE N_geloescht = 0 AND Nachfrage.B_id = '$userid'";
   
   //echo $sql;
   //run  the query against the mysql query function
@@ -162,13 +136,12 @@ include "login_req.php";
 		<div class="table-responsive">
 			<table class="table table-striped">
 			<tr>
-			<th>Titel</th>
-			<th>Beschreibung</th>
-			<th>Nr</th>
-			<th>Gültig bis</th>
-			<th>Angebote</th>
-			<th>Anzeigen</th>
-			<th>Löschen</th>
+				<th>Nr</th>
+				<th>Titel</th>
+				<th>Beschreibung</th>
+				<th>Lieferdatum</th>
+				<th>Angebote</th>
+				<th>Löschen</th>
 			</tr>
 		<?php
 			
@@ -183,18 +156,25 @@ include "login_req.php";
 		$text = substr($row['N_beschreibung'], 0,60);
 		$id = $row['N_id'];
 		$anz_angebote = $row['AngebotCount'];
+		
 		$frist = $row['N_gueltig_bis'];
+		$frist = date("j.n.Y", strtotime($row['N_gueltig_bis']));
 		
 
 
 ?>
 <tr>
+<td>  <a href="inserat.php?nr=<?php echo $id;?>" role="button" class="btn btn-info"><?php echo $id; ?></a> </td>
 <td><?php echo $titel; ?></td>
 <td><?php echo $text; ?></td>
-<td><?php echo $id; ?></td>
 <td><?php echo $frist; ?></td>
-<td><?php echo $anz_angebote; ?></td>
-<td><a href="inserat.php?nr=<?php echo $id;?>" role="button" class="btn btn-info">Anzeigen</a></td>
+<td><?php IF($anz_angebote == 0){
+	echo "Keine";
+}
+else {
+	echo "<a href='angebote.php?nr=$id' role='button' class='btn btn-success'>$anz_angebote Angebote</a>";
+}
+?></td>
 <td><a href="delete.php?nr=<?php echo $id;?>" role="button" class="btn btn-danger">Löschen</a></td>
 </tr>
 

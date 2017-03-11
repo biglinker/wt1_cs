@@ -97,7 +97,7 @@ include("db_connection.php");
 	
 	
 	//query  the database table
-	$sql="SELECT * FROM Nachfrage  WHERE N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
+	$sql="SELECT * FROM Nachfrage WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 AND N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
   
 	//run  the query against the mysql query function
 	$result=mysqli_query($conn, $sql);
@@ -105,7 +105,7 @@ include("db_connection.php");
 	IF( mysqli_num_rows($result) < 2 ){
 	    //Ersetze im Search-Query die Leerzeichen durch % um mehr Treffer zu erzielen
 		$search = str_replace(" ","%", $search);
-		$sql="SELECT * FROM Nachfrage  WHERE N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
+		$sql="SELECT * FROM Nachfrage WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 AND N_titel LIKE '%" . $search ."%' OR N_beschreibung LIKE '" . $search ."'  ORDER BY `Nachfrage`.`N_erstellt` DESC";
  
 		$result=mysqli_query($conn, $sql);
 	}

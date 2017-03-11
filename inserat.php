@@ -13,7 +13,7 @@ include("db_connection.php");
 
 
 
-	$sql = "SELECT * FROM Nachfrage WHERE N_id = $nr LIMIT 1";
+	$sql = "SELECT * FROM Nachfrage WHERE N_gueltig_bis > NOW() AND N_geloescht = 0 AND N_id = $nr LIMIT 1";
 	//echo $sql;
 	$result = mysqli_query($conn, $sql);
 
@@ -33,7 +33,7 @@ include("db_connection.php");
 		
     }
 } else {
-    $errorMessage = "Keine Resultate mit dieser Nummer</p>";
+    $errorMessage = "Kein Resultat mit dieser Nummer</p>";
 }
 
 
@@ -139,7 +139,7 @@ IF( isset($_POST["btn-angebot"]) ) {
 			<div class="col-md-8">
 				<h2><?php echo $titel;  ?></h2>
 				<p><?php echo $text;  ?></p>
-				<p><strong>gewünschte Qualität:</strong> <?php echo $quali;  ?></p>
+				<p><strong>gewünschte Qualität: </strong> <?php echo $quali;  ?></p>
 				<p><strong>gewünschte Menge: </strong> <?php echo $menge . " " . $menge_einheit ?></p>
 				<p><strong>Lieferzeitpunkt: </strong> <?php echo $datum_ablauf ?></p>
 				<p>Inserat-Nr <?php echo $nr;  ?></p>

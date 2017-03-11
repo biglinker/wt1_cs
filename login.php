@@ -10,76 +10,66 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 if(isset($_POST['B_email'])) {
 	$error = false;
+	//$errorMessage = "";
 	$email = strtolower($_POST['B_email']);
 	$passwort = $_POST['B_passwort'];
 	$passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
   
 	if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-		$errormessage = 'Bitte eine gültige E-Mail-Adresse eingeben<br>';
+		$errorMessage .= 'Bitte eine gültige E-Mail-Adresse eingeben! ';
 		$error = true;
 	} 
  
 	if(!$error) {
-
 		$sql = "SELECT * FROM Benutzer WHERE B_email = '$email'"; // AND WHERE B_Password ='$passwort_hash'";
 		$result = mysqli_query($conn, $sql);
 		if(mysqli_num_rows($result) == 1) {
 			while($row = mysqli_fetch_assoc($result)) {
 				$password_db = $row['B_password'];
 				$user_id = $row['B_id'];
-			}
+				
+				//Passwort prüfen
+				IF( password_verify($passwort, $password_db) ) {
+					//Wenn Passwort gültig, Session Variable setzen
+					$_SESSION['B_id'] = $user_id;
+					$_SESSION['time'] = time();
+					
+					$successMessage = "Login erfolgreich.";
+					
+					IF( isset($_GET['fwd']) ) {
+						$location_fwd = $_GET['fwd'];
+						//Umleitung bei erfolgreichem Login
+						echo "<meta http-equiv='refresh' content='0; url=$location_fwd'>";
+					}
+					else {
+						//Wenn kein Weiterleitungsparameter mitgeben wurde, auf Hauptseite weiterleiten
+						echo "<meta http-equiv='refresh' content='0; url=main.php'>";
+					}
+				}
+				else {
+					//Falsches Passwort
+					$errorMessage .= "Passworteingabe ungültig! ";
+					$error = true;
+				}	
+			}	
 		} 
 		else
 		{
-			$errormessage = 'Fehler beim Login, Konto nicht vorhanden!<br>';
+			//Kein Eintrag für diese Mail-Adresse
+			$errorMessage .= 'Das Konto ist nicht vorhanden! ';
 			$error = true;			
 		}
-		
-		//Passwort prüfen
-		IF( password_verify($passwort, $password_db) ) {
-			//Wenn Passwort gültig, Session Variable setzen
-			
-			$_SESSION['B_id'] = $user_id;
-			$_SESSION['time'] = time();
-			
-			$successMessage = "Login erfolgreich.";
-			
-			IF( isset($_GET['fwd']) ) {
-				$location_fwd = $_GET['fwd'];
-				//Umleitung bei erfolgreichem Login
-				echo "<meta http-equiv='refresh' content='1; url=$location_fwd'>";
-				//exit();
-				
-			}
-			else
-			{
-				//Wenn kein Weiterleitungsparameter mitgeben wurde, auf Hauptseite weiterleiten
-				echo "<meta http-equiv='refresh' content='1; url=main.php'>";
-				//exit();
-			}
-			
-		}
-		else
-		{
-			//Falsches Passwort
-			$errorMessage = "Passworteingabe ungültig";
-		}		
-	
 	} 
 	else {
-		$errorMessage = "E-Mail ist ungültig<br>";
+		$errorMessage .= "Email Adresse ist ungültig! ";
 	}
  
-  
-	//Aktuell werden nur die 2 Felder Email und Passwort Hash in die Datenbank gespeichert
-		 
-	if($result) { 
-		$successMessage = 'Du wurdest erfolgreich angemeldet.';
+	if(!$error) { 
+		$successMessage = 'Du wurdest erfolgreich angemeldet. ';
 	} 
 	else {
-			$errorMessage = 'Beim Anmelden ist leider ein Fehler aufgetreten<br>';
+		$errorMessage .= 'Beim Anmelden ist leider ein Fehler aufgetreten! ';
 	}
-	
 }
 ?>
 <head>
@@ -92,13 +82,7 @@ if(isset($_POST['B_email'])) {
   <link href="dev/login.css" rel="stylesheet">
 </head> 
 <body>
- 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
- 
+  
 	<!-- Include Navigation Bar -->
 	<div class="container">
 		<?php include("navigation.php"); ?>
