@@ -178,8 +178,11 @@ IF( isset($_POST["btn-angebot"]) ) {
 
 					<div class="form-group">						
 						<label class="control-label col-sm-3" for="A_menge">Menge</label>
-						<div class="col-sm-9">
+						<div class="col-sm-4">
 							<input type="text" class="form-control" size="40" maxlength="250" name="A_menge" placeholder="Menge">
+						</div>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" size="40" maxlength="250" name="A_menge" value="<?php echo $menge_einheit; ?>" readonly>
 						</div>
 					</div>		
 						

@@ -1,8 +1,9 @@
 ﻿ <!DOCTYPE html> 
 <html lang="de"> 
 <?php
-include "session_mgmt.php";
-include "db_connection.php";
+require_once "session_mgmt.php";
+require_once "db_connection.php";
+require_once "function_sendmail.php";
 
 include "login_req.php";
 
@@ -16,25 +17,141 @@ include "login_req.php";
 	
 	IF( isset($_GET['accept']) )
 	{
+		$A_id = $_GET['accept'];
 		echo "<p>Es wurde auf einen Accept Knopf gedrückt</p>";
 		
-		//Anbieter suchen für Zusage
-		//SQL Abfrage Inserat NR 72, Angebot = 92, 
-		$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.N_id = $nr AND Nachfrage.B_id = $userid AND N_geloescht = 0 ORDER BY A_Preis DESC";		
-		
-		//2 mal JOIN
-		//SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id WHERE Nachfrage.N_id = 71 AND Nachfrage.B_id = 27 AND N_geloescht = 0 
-		
-		//+SQL Update
-		
-		//SQL Abfrage Inserat NR 72, Angebot <> 92
-		//Anbieter suchen für Absage
-		//+SQL Update
-		
-		//Inserat deaktivieren
-		//SQL Update Insart auf gelöscht stellen
 		
 		
+		//1. Email-Adresse vom Nachfrager auslesen
+		$sql = "SELECT B_email FROM Benutzer WHERE B_id = $userid";		
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result)) {
+			$B_email_nachfrager =  $row['B_email'];
+			echo "<p>Email-Nachfrager: $B_email_nachfrager</p>";
+		}
+		
+		
+		//2. XML generieren
+		$sql = "SELECT N_titel,	N_beschreibung, N_qualitaet, N_gueltig_bis,	N_preis, N_menge, N_menge_einheit, B_email, B_firma, B_name, B_vname, B_strasse, B_strasse_nr,	B_plz,	B_ort FROM `Nachfrage` JOIN Benutzer ON Nachfrage.B_id = Benutzer.B_id WHERE Nachfrage.N_id = 71";
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);
+	
+		$B_anz_inserate = mysqli_num_rows($result);
+		echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
+		if (mysqli_num_rows($result) > 0) {
+			
+			//XML generieren mit Inserat und Adresse des Anbieters
+			//Create file name to save
+			
+			$filename = "export_" . $userid . "_" . date("Ymd_Hi",time()) . "_" . mt_rand(10,99) . ".xml";
+		  
+			//Create new document 
+			
+			$dom = new DOMDocument;
+			
+			$dom->preserveWhiteSpace = FALSE;
+
+			//add table in document 
+			$table = $dom->appendChild($dom->createElement('table'));
+
+			//add row in document 
+			foreach($result as $row) {
+
+				$data = $dom->createElement('row');
+				$table->appendChild($data);
+
+				//add column in document 
+				foreach($row as $name => $value) {
+					$value_xml = html_entity_decode($value,ENT_QUOTES);	
+
+					$col = $dom->createElement('column', $value_xml);
+
+					$data->appendChild($col);
+					$colattribute = $dom->createAttribute('name');
+					// Value for the created attribute
+					$colattribute->value = $name;
+					$col->appendChild($colattribute);           
+				}
+			}
+			$dom->formatOutput = true; // set the formatOutput attribute of domDocument to true 
+			$dom->save('xml/'.$filename); 
+		}		
+		
+		//3. XML an Anbieter schicken
+		$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id WHERE Nachfrage.N_id = $nr AND Angebot.A_id = $A_id AND N_geloescht = 0";		
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);
+	
+		$B_anz_inserate = mysqli_num_rows($result);
+		echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
+		if (mysqli_num_rows($result) > 0) {
+
+			while($row = mysqli_fetch_array($result)) {
+				$B_email_anbieter = $row['B_email'];
+				echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
+				
+				//Aufruf der Funktion, Versand von 1 Datei
+				//mail_att("empfaenger@domain.de", "Betreff Agricola", "Euer Nachrichtentext", "Absendername", "absender@domain.de", "antwortadresse@domain.de", "datei.zip");
+				//mail_att("ps@582.ch", "Betreff Agricola", "Euer Nachrichtentext", "webmaster@582.ch", "webmaster@582.ch", "webmaster@582.ch");
+				//Mail-Adresse anpassen!!!!   $B_email_nachfrager
+				mail_att("$B_email_nachfrager", "Zuschlag erhalten", "Nachricht von Agricola, Sie haben den Zuschlag zum liefern erhalten", "Automailer Agricola", "webmaster@082.ch", "$B_email_nachfrager", "xml/$filename");
+				
+			}
+		}
+		
+		
+		
+		
+		//4. Angebot auf Zusage setzen
+		$sql = "UPDATE  `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id SET Angebot.A_trade = 1 WHERE Nachfrage.N_id = $nr AND Angebot.A_id = $A_id AND N_geloescht = 0";
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);
+		
+		
+		
+		
+		//5. Absagen versenden
+		$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id WHERE Nachfrage.N_id = $nr AND Angebot.A_id <> $A_id AND N_geloescht = 0";		
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);
+	
+		$B_anz_inserate = mysqli_num_rows($result);
+		echo "<p>Absage an diesen Anbieter schicken</p>";
+		if (mysqli_num_rows($result) > 0) {
+
+			while($row = mysqli_fetch_array($result)) {
+				$B_email_anbieter = $row['B_email'];
+				echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
+				
+				//Aufruf der Funktion, Versand von 1 Datei
+				//mail_att("empfaenger@domain.de", "Betreff Agricola", "Euer Nachrichtentext", "Absendername", "absender@domain.de", "antwortadresse@domain.de", "datei.zip");
+				//mail_att("ps@582.ch", "Betreff Agricola", "Euer Nachrichtentext", "webmaster@582.ch", "webmaster@582.ch", "webmaster@582.ch");
+				//Mail-Adresse anpassen!!!!   $B_email_nachfrager
+				mail_att("$B_email_anbieter", "Absage vom Nachfrager", "Nachricht von Agricola, Sie haben den Zuschlag nicht erhalten", "Automailer Agricola", "webmaster@082.ch", "webmaster@082.ch", NULL);
+				
+			}
+		}
+		
+		
+		
+		
+		//6. Angebote auf Absage setzen
+		$sql = "UPDATE  `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id SET Angebot.A_trade = 0 WHERE Nachfrage.N_id = $nr AND Angebot.A_id <> $A_id AND N_geloescht = 0";
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);		
+		
+		
+		
+		
+		//7. Inserat deaktivieren, auf gelöscht setzen
+		$sql = "UPDATE  `Nachfrage` SET Nachfrage.N_geloescht = 1 WHERE Nachfrage.N_id = $nr";
+		echo "<p>$sql</p>";
+		$result = mysqli_query($conn, $sql);		
+			
+		
+		
+
 		
 		
 	}
@@ -98,7 +215,7 @@ include "login_req.php";
 	
  <?php  
   //query  the database table
-	$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.N_id = $nr AND Nachfrage.B_id = $userid AND N_geloescht = 0 ORDER BY A_Preis DESC";
+	$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id WHERE Nachfrage.N_id = $nr AND Nachfrage.B_id = $userid AND N_geloescht = 0 ORDER BY A_Preis ASC";
   
   //echo $sql;
   //run  the query against the mysql query function
