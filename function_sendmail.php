@@ -10,16 +10,16 @@ function mail_att($to, $subject, $message, $sender, $sender_email, $reply_email,
  
 	$header  ="From:".$sender."<".$sender_email.">\n";
 	$header .= "Reply-To: ".$reply_email."\n";
-	$header.= "MIME-Version: 1.0\r\n";
-	$header.= "Content-Type: multipart/mixed;\r\n";
-	$header.= " boundary=\"".$mime_boundary."\"\r\n";
+	$header .= "MIME-Version: 1.0\r\n";
+	$header .= "Content-Type: multipart/mixed;\r\n";
+	$header .= " boundary=\"".$mime_boundary."\"\r\n";
 	$encoding = mb_detect_encoding($message, "utf-8, iso-8859-1, cp-1252");
 	$content = "This is a multi-part message in MIME format.\n\n";
-	$content.= "--".$mime_boundary."\n";
-	$content.= "Content-Type: text/html; charset=\"$encoding\"\n";
-	$content.= "Content-Transfer-Encoding: 8bit\n";
+	$content .= "--".$mime_boundary."\n";
+	$content .= "Content-Type: text/html; charset=\"$encoding\"\n";
+	$content .= "Content-Transfer-Encoding: 8bit\n";
 	$content .= "Content-Disposition: inline\r\n";
-	$content.= $message."\r\n";
+	$content .= $message."\r\n";
 
 	//Anhang
 	IF( !empty($dateien) ) {
