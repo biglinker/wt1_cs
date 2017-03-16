@@ -1,17 +1,34 @@
 ﻿<?php 
-session_start();
-
-//Only for development
-ini_set("display_errors", 1);
-error_reporting(E_ALL & ~E_NOTICE);
-
 include("session_mgmt.php");
-include("db_connection.php");
 
+require_once "function_sendmail.php";
 
+//Parameter
+$bearbeiter = "ps@582.ch";  //Diese Mail-Adresse ist verwantwortlich für die Bearbeitung der Anfragen via Kontaktformular
 
-
-
+IF( !empty($_POST) ){
+	//Variabeln umwandeln
+	$C_email = trim(htmlentities($_POST["C_email"], ENT_QUOTES));
+	$C_name = trim(htmlentities($_POST["C_name"], ENT_QUOTES));
+	$C_tel = trim(htmlentities($_POST["C_tel"], ENT_QUOTES));
+	
+	$datum = date("d.m.Y H:i:s",time());
+	
+	$betreff = "Passwort-Reset Agricola";
+	$from = "From: Webseite agricola <webmaster@582.ch>\n";
+	$from .= "Reply-To: $C_email\n";
+	$from .= "Content-Type: text/html\n";
+	$text = "$C_tel";
+ 
+	$return = mail($bearbeiter, $betreff, $text, $from);
+				
+	IF( $return == true ){
+		$successMessage = "Mail wurde verschickt!";
+	}
+	else {
+		$errorMessage = "Es gab Probleme!";
+	}
+}
 
 ?>
 
@@ -28,48 +45,81 @@ include("db_connection.php");
 </head> 
 
 <body>
- 
-<?php 
-if(isset($errorMessage)) {
- echo $errorMessage;
-}
-?>
- 
+  
 	<!-- Include Navigation Bar -->
 	<div class="container">
 		<?php include("navigation.php"); ?>
 	</div>
  
- <!-- Page Content -->
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-12">
-			<h1>Passwort zurücksetzen</h1>
+	<!-- Page Header -->
+	<div class="container">
+	
+		<!-- Fehler Ausgabe -->
+		<?php 
+			if(isset($errorMessage)) {
+		?>	
+		<div class="alert alert-danger">
+			<strong>Fehler! </strong><?php echo $errorMessage; ?>
+		</div>
+		<?php		} 	?>	
 		
-				<form action="pwreset_submit.php" method="post" class="form-signin">
-				<h2 class="form-signin-heading"> Passwort anfordern </h2><br>
-				E-Mail:<br>
-				<input type="email" class="form-control" size="40" maxlength="250" name="B_email" ><br><br>
-			 			 
-				<input type="submit" value="Zurücksetzen" class="btn btn-lg btn-success btn-block">
-				
-				
-			</form>
-			
-        </div>
-      </div>
-   </div>
+		<!-- Erfolgsmeldung -->
+		<?php 
+			if(isset($successMessage)) {
+		?>	
+		<div class="alert alert-success">
+			<strong>Erfolg! </strong><?php echo $successMessage; ?>
+		</div>
+		<?php		} 	?>		
+	
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Passwort Reset</h1>
+				<p>Um das Passwort zurückzusetzen, verwenden sie das untenstehende Formular.</p>
+			</div>
+		</div>
+	</div>
+ 
+   <!-- Page Content -->
+    <div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<form class="form-horizontal" action="pwreset.php" method="post">
 
-	<footer>
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-		<h5>2017 @ IBZ Agricola-Trade developed by Philipp Schelbert, Daniel Staub</h5>
-      </div>
+					<div class="form-group">					
+						<label class="control-label col-sm-2" for="C_email">E-Mail</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" size="40" maxlength="250" name="C_email" placeholder="E-Mail">
+						</div>
+					</div>
 
-	</footer>
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="C_name">Firma / Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="C_name" placeholder="Name">						
+						</div>
+					</div>
+					
+					<div class="form-group">						
+						<label class="control-label col-sm-2" for="C_tel">Telefonnummer</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" size="40" maxlength="250" name="C_tel" placeholder="041 123 45 67">					
+						</div>
+					</div>					
+					
+					<div class="form-group">	
+						    <div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-default">Abschicken</button>
+							</div>
+					</div>	
+				</form> 
+			</div>
+		</div>
+	</div>
+   
+	<!-- Footer -->
+	<?php include "footer.php" ?>
 
-</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -78,3 +128,4 @@ if(isset($errorMessage)) {
     <script src="res/bootstrap/js/docs.min.js"></script>
 </body>
 </html>
+
