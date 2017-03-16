@@ -18,27 +18,27 @@ include "login_req.php";
 	IF( isset($_GET['accept']) )
 	{
 		$A_id = $_GET['accept'];
-		//echo "<p>Es wurde auf einen Accept Knopf gedrückt</p>";
+		echo "<p>Es wurde auf einen Accept Knopf gedrückt</p>";
 		
 		
 		
 		//1. Email-Adresse vom Nachfrager auslesen
 		$sql = "SELECT B_email FROM Benutzer WHERE B_id = $userid";		
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);
 		while($row = mysqli_fetch_array($result)) {
 			$B_email_nachfrager =  $row['B_email'];
-			//echo "<p>Email-Nachfrager: $B_email_nachfrager</p>";
+			echo "<p>Email-Nachfrager: $B_email_nachfrager</p>";
 		}
 		
 		
 		//2. XML generieren
 		$sql = "SELECT N_titel,	N_beschreibung, N_qualitaet, N_gueltig_bis,	N_preis, N_menge, N_menge_einheit, B_email, B_firma, B_name, B_vname, B_strasse, B_strasse_nr,	B_plz,	B_ort FROM `Nachfrage` JOIN Benutzer ON Nachfrage.B_id = Benutzer.B_id WHERE Nachfrage.N_id = 71";
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);
 	
 		$B_anz_inserate = mysqli_num_rows($result);
-		//echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
+		echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
 		if (mysqli_num_rows($result) > 0) {
 			
 			//XML generieren mit Inserat und Adresse des Anbieters
@@ -80,16 +80,16 @@ include "login_req.php";
 		
 		//3. XML an Anbieter schicken
 		$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id WHERE Nachfrage.N_id = $nr AND Angebot.A_id = $A_id AND N_geloescht = 0";		
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);
 	
 		$B_anz_inserate = mysqli_num_rows($result);
-		//echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
+		echo "<p>Zusage mit XML an diesen Anbieter schicken</p>";
 		if (mysqli_num_rows($result) > 0) {
 
 			while($row = mysqli_fetch_array($result)) {
 				$B_email_anbieter = $row['B_email'];
-				//echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
+				echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
 				
 				//Aufruf der Funktion, Versand von 1 Datei
 				//mail_att("empfaenger@domain.de", "Betreff Agricola", "Euer Nachrichtentext", "Absendername", "absender@domain.de", "antwortadresse@domain.de", "datei.zip");
@@ -105,7 +105,7 @@ include "login_req.php";
 		
 		//4. Angebot auf Zusage setzen
 		$sql = "UPDATE  `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id SET Angebot.A_trade = 1 WHERE Nachfrage.N_id = $nr AND Angebot.A_id = $A_id AND N_geloescht = 0";
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);
 		
 		
@@ -113,16 +113,16 @@ include "login_req.php";
 		
 		//5. Absagen versenden
 		$sql = "SELECT * FROM `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id WHERE Nachfrage.N_id = $nr AND Angebot.A_id <> $A_id AND N_geloescht = 0";		
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);
 	
 		$B_anz_inserate = mysqli_num_rows($result);
-		//echo "<p>Absage an diesen Anbieter schicken</p>";
+		echo "<p>Absage an diesen Anbieter schicken</p>";
 		if (mysqli_num_rows($result) > 0) {
 
 			while($row = mysqli_fetch_array($result)) {
 				$B_email_anbieter = $row['B_email'];
-				//echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
+				echo "<p>Anbieter-Mail-Adresse:" . $B_email_anbieter . "</p>";
 				
 				//Aufruf der Funktion, Versand von 1 Datei
 				//mail_att("empfaenger@domain.de", "Betreff Agricola", "Euer Nachrichtentext", "Absendername", "absender@domain.de", "antwortadresse@domain.de", "datei.zip");
@@ -138,7 +138,7 @@ include "login_req.php";
 		
 		//6. Angebote auf Absage setzen
 		$sql = "UPDATE  `Nachfrage` JOIN Angebot ON Nachfrage.N_id = Angebot.N_id JOIN Benutzer ON Angebot.B_id = Benutzer.B_id SET Angebot.A_trade = 0 WHERE Nachfrage.N_id = $nr AND Angebot.A_id <> $A_id AND N_geloescht = 0";
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);		
 		
 		
@@ -146,14 +146,14 @@ include "login_req.php";
 		
 		//7. Inserat deaktivieren, auf gelöscht setzen
 		$sql = "UPDATE  `Nachfrage` SET Nachfrage.N_geloescht = 1 WHERE Nachfrage.N_id = $nr";
-		//echo "<p>$sql</p>";
+		echo "<p>$sql</p>";
 		$result = mysqli_query($conn, $sql);		
 			
 		
 		
 
 		
-		echo "<meta http-equiv='refresh' content='0; url=konto.php'>";
+		
 	}
 	
 	
