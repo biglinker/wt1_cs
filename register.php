@@ -174,14 +174,14 @@ if(isset($_GET['register'])) {
 					<div class="form-group">						
 						<label class="control-label col-sm-2" for="B_strasse_nr">Strassennr</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" size="40" maxlength="50" name="B_strasse_nr" placeholder="Strassennr">					
+							<input type="text" class="form-control" size="40" maxlength="50" name="B_strasse_nr" placeholder="56">					
 						</div>
 					</div>
 
 					<div class="form-group">						
 						<label class="control-label col-sm-2" for="B_plz">PLZ</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" size="40" maxlength="250" name="B_plz" placeholder="Postleitzahl">					
+							<input type="text" class="form-control" size="40" maxlength="250" name="B_plz" placeholder="6400">					
 						</div>
 					</div>	
 

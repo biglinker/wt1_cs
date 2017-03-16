@@ -10,11 +10,17 @@ IF( !empty($_POST) ){
 	//Variabeln umwandeln
 	$C_email = trim(htmlentities($_POST["C_email"], ENT_QUOTES));
 	$C_name = trim(htmlentities($_POST["C_name"], ENT_QUOTES));
-	$C_nachricht = nl2br(trim(htmlentities($_POST["C_nachricht"], ENT_QUOTES)));
+	$C_nachricht = nl2br(htmlentities($_POST["C_nachricht"], ENT_QUOTES));
 	
 	$datum = date("d.m.Y H:i:s",time());
 	
-	$return = mail_att($bearbeiter, "Kontaktformular Agricola", "Das Kontaktformular auf Agricola wurde ausgefüllt<br>--------------<br>Name: $C_name <br>Email: $C_email <br>Zeit: $datum <br>---------<br>Nachricht: <br>$C_nachricht", "Automailer Agricola", "webmaster@082.ch", "$C_email", NULL);
+	$betreff = "Kontaktformular Agricola";
+	$from = "From: Webseite agricola <webmaster@582.ch>\n";
+	$from .= "Reply-To: $C_email\n";
+	$from .= "Content-Type: text/html\n";
+	$text = "$C_nachricht";
+ 
+	$return = mail($bearbeiter, $betreff, $text, $from);
 				
 	IF( $return == true ){
 		$successMessage = "Mail wurde verschickt!";

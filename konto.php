@@ -83,32 +83,12 @@ include "login_req.php";
 			</div>
 			
 			<div class="col-md-4">
-				<h1>XML Export</h1>
-				<p>Exportieren Sie die Angebote zu Ihren Inseraten bequem als XML-Datei. Damit können sie das perfekt in ihre bestehende ERM Software einbinden.</p>
-				<p><a class="btn btn-default" href="xml.php" role="button">XML-Export starten &raquo;</a></p>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-4">
-			<!--	<h1>-</h1>
-				<p>-</p>
-				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>-->
-			</div>
-			
-			<div class="col-md-4">
-			<!--	<h1>-</h1>
-				<p>-</p>
-				<p><a class="btn btn-default" href="#" role="button">x &raquo;</a></p>-->
-			</div>
-			
-			<div class="col-md-4">
 				<h1>Logout</h1>
 				<p>Sie haben für heute fertig und möchten sich jetzt sicher abmelden</p>
 				<p><a class="btn btn-default" href="logout.php" role="button">Logout &raquo;</a></p>
 			</div>
 		</div>
-
+		
 		<div class="row">
 			<div class="col-md-12">	
 				<h1>Übersicht über Ihre aktuellen Inserate</h1>	
@@ -175,7 +155,7 @@ else {
 	echo "<a href='angebote.php?nr=$id' role='button' class='btn btn-success'>$anz_angebote Angebote</a>";
 }
 ?></td>
-<td><a href="delete.php?nr=<?php echo $id;?>" role="button" class="btn btn-danger">Löschen</a></td>
+<td><a href="delete.php?del=<?php echo $id;?>" role="button" class="btn btn-danger">Löschen</a></td>
 </tr>
 
 
